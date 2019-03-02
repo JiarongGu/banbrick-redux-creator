@@ -14,7 +14,7 @@ const store = configureStore({ reducers, initalState, middlewares, devTool: true
 ```
   
 ### build redcuers
-##### build reducers and state with ReduxCreator
+#### build reducers and state with ReduxCreator
 ```
 import { ReduxCreator } from '@banbrick/redux-creator';
 
@@ -22,27 +22,22 @@ import { ReduxCreator } from '@banbrick/redux-creator';
 const actions = new ReduxCreator('test', initalState)
   .addReducer((state, payload) => ({ ...state, payload }))
   .build();
-
-export testActions = {
-  testAction = actions[0]
-}
+  
+export testActions = { testAction: actions[0] }
 ```
   
-##### name your reducer actions
+#### name your reducer actions
 actions will return by a object, you can name it or default by index start with 0
 ```
 const actions = new ReduxCreator('test', initalState)
   .addReducer((state, payload) => ({ ...state, payload }), 'testAction')
   .build();
-
-export testActions = {
-  testAction = actions.testAction
-}
+  
+export testActions = { testAction: actions.testAction }
 ```
   
 #### add effect handler
 effect handler to process async effects and dispatch action to reducers
-
 ```
 const effectHandler = async (store, payload) {
   // your effect logic, you can dispath store events by effect handler
@@ -51,7 +46,6 @@ const effectHandler = async (store, payload) {
 const actions = new ReduxCreator()
   .addEffectHandler(effectHandler)
   .build();
-
 ```
   
 effect handlers behaves as same as reducer actions, you can name it or get by index 
@@ -59,6 +53,14 @@ effect handlers behaves as same as reducer actions, you can name it or get by in
   
 ## Advanced Usage
 ### Location Middleware
+#### add location event to history
+```
+const history = createBrowserHistory();
+history.listen((location) => {
+  store.dispatch({ type: 'Location_Change', payload: history });
+});
+```
+
 #### config location middleware
 ```
 // convert payload to location for location middleware;
@@ -66,8 +68,7 @@ const locationFormatter: (payload) => payload.location;
 
 // location middleware config
 const locationMiddleware = { 
-  actionType: 'Location_Change_Action',
-  locationFormatter 
+  actionType: 'Location_Change'
 };
 
 // set up location middleware when using configureStore
