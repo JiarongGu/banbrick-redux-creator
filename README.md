@@ -1,9 +1,10 @@
 # @banbrick/redux-creator
-for easier life on redux ``npm version 1.0.2``
+for easier life on redux ``npm version 1.0.2``  
+[@banbrick/redux-creator](https://www.npmjs.com/package/@banbrick/redux-creator)
 
 ## npm install
 ```npm i @banbrick/redux-creator```  
-[npm-link](https://www.npmjs.com/package/@banbrick/redux-creator)
+
   
 ## How to use
 - configureStore: create a store can use ReduxCreator  
