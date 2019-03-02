@@ -7,7 +7,7 @@ redux creator for less boilerplate
 ## How to use
 ### Configure store
 create a store can use ReduxCreator with configureStore
-```
+```javascript
 import { configureStore } from '@banbrick/redux-creator';
 // its also possible to add reducers and middlewares through this api
 const store = configureStore({ reducers, initalState, middlewares, devTool: true });
@@ -28,7 +28,7 @@ export testActions = { testAction: actions[0] }
   
 #### name your actions
 actions will return by a object, you can name it or default by index start with 0
-```
+```javascript
 const actions = new ReduxCreator('test', initalState)
   .addReducer((state, payload) => ({ ...state, payload }), 'testAction')
   .build();
@@ -38,7 +38,7 @@ export testActions = { testAction: actions.testAction }
   
 #### add effect handler
 effect handler to process async effects and dispatch action to reducers
-```
+```javascript
 const effectHandler = async (store, payload) {
   // your effect logic, you can dispath store events by effect handler
 }
@@ -54,7 +54,7 @@ effect handlers behaves as same as reducer actions, you can name it or get by in
 ## Advanced Usage
 ### Location Middleware
 #### add location event to history
-```
+```javascript
 const history = createBrowserHistory();
 history.listen((location) => {
   store.dispatch({ type: 'Location_Change', payload: history });
@@ -62,7 +62,7 @@ history.listen((location) => {
 ```
 
 #### config location middleware
-```
+```javascript
 // convert payload to location for location middleware;
 const locationFormatter: (payload) => payload.location;
 
@@ -77,7 +77,7 @@ const store = configureStore({ locationMiddleware, devTool: true });
   
 #### add location handler
 effect handler to process async effects and dispatch action to reducers
-```
+```javascript
 const locationHandler = async (store, location) {
   // add your location handling logic
   // for example::
@@ -92,13 +92,13 @@ const actions = new ReduxCreator()
 ```
   
 ### Explicitly Process Location Events
-```
+```javascript
 import { processLocationEvents } from '@banbrick/redux-creator';
 ```
 this will alloed you to run location events explicitly
   
 ### Get running Effect Tasks
-```
+```javascript
 import { getEffectTasks } from '@banbrick/redux-creator';
 ```
 this will allowed you to get current running effects, can be useful when doing SSR
