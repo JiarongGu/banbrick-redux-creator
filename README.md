@@ -3,7 +3,10 @@ redux creator for less boilerplate, also allow redux to be loaded by code split
 
 ## Install
 ```npm i @banbrick/redux-creator```  
-  
+
+## Example
+[ReactCoreTemplate](https://github.com/JiarongGu/ReactCoreTemplate/tree/master/ReactCoreTemplate/ClientApp)
+
 ## How to use
 ### Configure store
 create a store can use ReduxCreator with configureStore
