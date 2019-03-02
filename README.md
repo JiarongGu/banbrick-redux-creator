@@ -3,12 +3,12 @@ for easier life on redux ``npm version 1.0.2``
 
 ## NPM Install
 ```npm i @banbrick/redux-creator```
-  
+<br>
   
 ## Main APIs
 ``configureStore``: create a store can use ReduxCreator  
 ``ReduxCreator``: main creator class to config store  
-  
+<br> 
   
 ## Create store
 ```
@@ -16,7 +16,7 @@ import { configureStore } from '@banbrick/redux-creator';
 const store = configureStore({ reducers, initalState, middlewares, devTool: true });
 ```
 its also possible to add reducers and middlewares through this api
-  
+<br>
   
 ## Use Redux Creator
   
@@ -62,7 +62,7 @@ const actions = new ReduxCreator()
 ```
   
 effect handlers behaves as same as reducer actions, you can name it or get by index 
-  
+<br>
   
 ## Advanced Usage
 
