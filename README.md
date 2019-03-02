@@ -15,7 +15,7 @@ const store = configureStore({ reducers, initalState, middlewares, devTool: true
   
 ### Add state and redcuers
 #### build reducers and state with ReduxCreator
-```
+```javascript
 import { ReduxCreator } from '@banbrick/redux-creator';
 
 // build reducers with namespace and inital state
