@@ -1,7 +1,7 @@
 # [@banbrick/redux-creator](https://www.npmjs.com/package/@banbrick/redux-creator)  
 redux creator for less boilerplate
 
-## npm install
+## Install
 ```npm i @banbrick/redux-creator```  
   
 ## How to use
