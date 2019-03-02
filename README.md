@@ -3,12 +3,11 @@ for easier life on redux ``npm version 1.0.2``
 
 ## npm install
 ```npm i @banbrick/redux-creator```
-  
+[npm](https://www.npmjs.com/package/@banbrick/redux-creator)
   
 ## How to use
-``configureStore``: create a store can use ReduxCreator  
-``ReduxCreator``: main creator class to config store  
-   
+- configureStore: create a store can use ReduxCreator  
+- ReduxCreator: main creator class to config store  
   
 ### Create store
 ```
