@@ -1,14 +1,14 @@
-[@banbrick/redux-creator](https://www.npmjs.com/package/@banbrick/redux-creator)  
+# [@banbrick/redux-creator](https://www.npmjs.com/package/@banbrick/redux-creator)  
 redux creator for less boilerplate
 
-# npm install
+## npm install
 ```npm i @banbrick/redux-creator```  
   
-# How to use
+## How to use
 - configureStore: create a store can use ReduxCreator  
 - ReduxCreator: main creator class to config store  
   
-## Create store
+### Create store
 ```
 import { configureStore } from '@banbrick/redux-creator';
 const store = configureStore({ reducers, initalState, middlewares, devTool: true });
@@ -16,9 +16,9 @@ const store = configureStore({ reducers, initalState, middlewares, devTool: true
 its also possible to add reducers and middlewares through this api
   
   
-## Use Redux Creator
+### Use Redux Creator
   
-### create state and reducers
+#### create state and reducers
 ```
 import { ReduxCreator } from '@banbrick/redux-creator';
 
@@ -32,7 +32,7 @@ export testActions = {
 }
 ```
   
-### name your reducer actions
+#### name your reducer actions
 actions will return by a object, you can name it or default by index start with 0
 
 ```
@@ -45,7 +45,7 @@ export testActions = {
 }
 ```
   
-### add effect handler
+#### add effect handler
 effect handler to process async effects and dispatch action to reducers
 
 ```
@@ -62,24 +62,24 @@ const actions = new ReduxCreator()
 effect handlers behaves as same as reducer actions, you can name it or get by index 
 <br>
   
-# Advanced Usage
-
-## Location Middleware
-### set up
-set up location middleware when using configureStore
+## Advanced Usage
+### Location Middleware
+#### config location middleware
 ```
-const locationMiddleware = { actionType: 'Location_Change_Action' };
+// convert payload to location for location middleware;
+const locationFormatter: (payload) => payload.location;
+
+// location middleware config
+const locationMiddleware = { 
+  actionType: 'Location_Change_Action',
+  locationFormatter 
+};
+
+// set up location middleware when using configureStore
 const store = configureStore({ locationMiddleware, devTool: true });
 ```
   
-### config formatter
-convert payload to location for location middleware
-```
-locationFormatter: (payload) => payload.location;
-const locationMiddleware = { actionType: 'Location_Change_Action', locationFormatter };
-```
-  
-### add location handler
+#### add location handler
 effect handler to process async effects and dispatch action to reducers
 ```
 const locationHandler = async (store, location) {
@@ -95,9 +95,9 @@ const actions = new ReduxCreator()
 
 ```
   
-## processLocationEvents
+### processLocationEvents
 this will alloed you to run location events explicitly
   
-## getEffectTasks
+### getEffectTasks
 this will allowed you to get current running effects, can be useful when doing SSR
   
