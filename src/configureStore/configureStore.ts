@@ -12,7 +12,12 @@ export function configureStore<TState>(config?: StoreConfiguration<TState, any>)
   const devTool = !!(config && config.devTool);
   const locationConfig = config && config.locationMiddleware;
 
-  const locationMiddleware = locationConfig && createLocationMiddleware(locationConfig.actionType, locationConfig.locationFormatter);
+  const locationMiddleware = locationConfig && createLocationMiddleware(
+    locationConfig.actionType, 
+    locationConfig.initalLocation, 
+    locationConfig.locationFormatter, 
+    locationConfig.reload
+  );
   
   const applyMiddlewares = configMiddlewares.concat([effectsMiddleware]);
   if (locationMiddleware) 

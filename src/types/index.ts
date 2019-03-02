@@ -39,22 +39,23 @@ export interface ReducerEvent<TState, TPayload> {
 
 export type PromiseMiddlewareHandler<TPayload> = (store: MiddlewareAPI<any>, payload: TPayload) => Promise<any>;
 
-export interface PromiseMiddlewareHandlerEvent<TPayload>
-{ 
+export interface PromiseMiddlewareHandlerEvent<TPayload> {
   action: ActionFunction1<TPayload>;
   handler: PromiseMiddlewareHandler<TPayload>;
   priority?: number;
 };
 
 export interface ReducerRegistration<TState> {
-  namespace: string, 
-  initalState: TState, 
+  namespace: string,
+  initalState: TState,
   reducerEvents: Array<ReducerEvent<TState, any>>
 }
 
 export interface LocationMiddlewareConfig<TPayload> {
   actionType: string;
+  initalLocation: Location;
   locationFormatter?: (payload: TPayload) => Location;
+  reload?: boolean;
 }
 
 export interface StoreConfiguration<TState, TPayload> {
