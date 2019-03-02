@@ -5,20 +5,16 @@ redux creator for less boilerplate
 ```npm i @banbrick/redux-creator```  
   
 ## How to use
-- configureStore: create a store can use ReduxCreator  
-- ReduxCreator: main creator class to config store  
-  
-### Create store
+### configure store
+create a store can use ReduxCreator with configureStore
 ```
 import { configureStore } from '@banbrick/redux-creator';
+// its also possible to add reducers and middlewares through this api
 const store = configureStore({ reducers, initalState, middlewares, devTool: true });
 ```
-its also possible to add reducers and middlewares through this api
   
-  
-### Use Redux Creator
-  
-#### create state and reducers
+### build redcuers
+#### build reducers and state with ReduxCreator
 ```
 import { ReduxCreator } from '@banbrick/redux-creator';
 
@@ -34,7 +30,6 @@ export testActions = {
   
 #### name your reducer actions
 actions will return by a object, you can name it or default by index start with 0
-
 ```
 const actions = new ReduxCreator('test', initalState)
   .addReducer((state, payload) => ({ ...state, payload }), 'testAction')
