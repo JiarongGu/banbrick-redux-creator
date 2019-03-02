@@ -1,7 +1,7 @@
 # @banbrick/redux-creator
 for easier life on redux ``npm version 1.0.2``
 
-## NPM Install
+## npm install
 ```npm i @banbrick/redux-creator```
   
   
