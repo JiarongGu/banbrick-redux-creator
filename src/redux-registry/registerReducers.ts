@@ -1,5 +1,5 @@
 import { replaceReducer } from './reducerRegistry';
-import { ReducerRegistration, Reducer, ReducerEvent } from 'types';
+import { ReducerRegistration, Reducer, ReducerEvent } from '../types';
 
 function combineReducerEvents<TState>(initalState: TState, ...events: Array<ReducerEvent<TState, any>>): Reducer<TState, any> 
 {

@@ -1,5 +1,5 @@
-import { PromiseMiddlewareHandler, PromiseMiddlewareHandlerEvent, ActionFunction1 } from 'types';
-import { uniqueId } from 'uniqueId';
+import { PromiseMiddlewareHandler, PromiseMiddlewareHandlerEvent, ActionFunction1 } from '../types';
+import { uniqueId } from '../uniqueId';
 
 export function createPromiseHandler<TPayload>(
   promisehandler: PromiseMiddlewareHandler<TPayload>, actionType?: string, priority?: number

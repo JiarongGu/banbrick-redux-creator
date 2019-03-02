@@ -1,9 +1,9 @@
 import { Location } from 'history';
-import { PromiseMiddlewareHandlerEvent, ReducerEvent, ReducerHandler, PromiseMiddlewareHandler } from 'types';
-import { registerReducer } from 'redux-registry';
-import { registerEffectEvent } from 'redux-effects-middleware';
-import { registerLocationEvent } from 'redux-location-middleware';
-import { createReducer, createPromiseHandler } from 'creators';
+import { PromiseMiddlewareHandlerEvent, ReducerEvent, ReducerHandler, PromiseMiddlewareHandler } from './types';
+import { registerReducer } from './redux-registry';
+import { registerEffectEvent } from './redux-effects-middleware';
+import { registerLocationEvent } from './redux-location-middleware';
+import { createReducer, createPromiseHandler } from './creators';
 
 export class ReduxCreator<TState> {
   private namespace?: string;

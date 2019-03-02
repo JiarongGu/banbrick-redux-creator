@@ -1,7 +1,7 @@
 import { MiddlewareAPI, Dispatch, AnyAction } from 'redux';
 import { Location } from 'history';
-import { getCurrentStore } from 'redux-registry';
-import { PromiseMiddlewareHandlerEvent } from 'types';
+import { getCurrentStore } from '../redux-registry';
+import { PromiseMiddlewareHandlerEvent } from '../types';
 
 const locationHanlderMap = new Map<string, PromiseMiddlewareHandlerEvent<Location>>();
 let locationHanlderEvents: Array<PromiseMiddlewareHandlerEvent<Location>> | undefined;

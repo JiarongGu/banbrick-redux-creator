@@ -1,5 +1,5 @@
 import { MiddlewareAPI, Dispatch, AnyAction } from 'redux';
-import { PromiseMiddlewareHandler, PromiseMiddlewareHandlerEvent } from 'types';
+import { PromiseMiddlewareHandler, PromiseMiddlewareHandlerEvent } from '../types';
 
 const effectsHandlerMap = new Map<string, PromiseMiddlewareHandler<any>>();
 const effectTasks: Array<Promise<any>> = [];

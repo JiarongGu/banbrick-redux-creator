@@ -1,9 +1,9 @@
 import { Store, createStore, applyMiddleware, compose } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { createLocationMiddleware } from 'redux-location-middleware';
-import { effectsMiddleware } from 'redux-effects-middleware';
-import { buildRootReducer, registerStore } from 'redux-registry/reducerRegistry';
-import { StoreConfiguration } from 'types';
+import { createLocationMiddleware } from '../redux-location-middleware';
+import { effectsMiddleware } from '../redux-effects-middleware';
+import { buildRootReducer, registerStore } from '../redux-registry';
+import { StoreConfiguration } from '../types';
 
 export function configureStore<TState>(config?: StoreConfiguration<TState, any>): Store<TState> {
   const initalState = config && config.initalState;

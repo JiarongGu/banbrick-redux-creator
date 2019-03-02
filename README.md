@@ -1,20 +1,72 @@
 # @banbrick/redux-creator
-for easier life on redux ``npm version 1.0.0``
+for easier life on redux ``npm version 1.0.1``
 
-## Getting Started
-
-### Install
+## NPM Install
 ```npm i @banbrick/redux-creator```
 
-### Create store
-this will create a store with registration ability
+## Main APIs
+``configureStore``: create a store can use ReduxCreator
+``ReduxCreator``: main creator class to config store
+
+## Create store
+```
+import { configureStore } from '@banbrick/redux-creator';
+const store = configureStore({ reducers, initalState, middlewares, devTool: true });
+```
+its also possible to add reducers and middlewares through this api
+  
+
+## Use Redux Creator
+
+### create state and reducers
+```
+import { ReduxCreator } from '@banbrick/redux-creator';
+
+// build reducers with namespace and inital state
+const actions = new ReduxCreator('test', initalState)
+  .addReducer((state, payload) => ({ ...state, payload }))
+  .build();
+
+export testActions = {
+  testAction = actions[0]
+}
+```
+
+#### name your reducer actions
+actions will return by a object, you can name it or default by index start with 0
 
 ```
-import { ConnectedRouter, configureStore } from '@banbrick/redux-creator';
-const store = configureStore<ApplicationState>({ reducers, initalState, middlewares, devTool: true });
+const actions = new ReduxCreator('test', initalState)
+  .addReducer((state, payload) => ({ ...state, payload }), 'testAction')
+  .build();
+
+export testActions = {
+  testAction = actions.testAction
+}
 ```
 
-### Setup Location Middleware
+### add effect handler
+effect handler to process async effects and dispatch action to reducers
+
+```
+const effectHandler = async (store, payload) {
+  // your effect logic, you can dispath store events by effect handler
+}
+
+const actions = new ReduxCreator()
+  .addEffectHandler(effectHandler)
+  .build();
+
+```
+
+effect handlers behaves as same as reducer actions, you can name it or get by index 
+  
+  
+## Advanced Usage
+
+### Location Middleware
+
+#### Set up
 ```
 const locationMiddleware = { actionType: 'Location_Change_Action' };
 const store = configureStore<ApplicationState>({ locationMiddleware, devTool: true });
@@ -26,63 +78,26 @@ locationFormatter: (payload) => payload.location;
 const locationMiddleware = { actionType: 'Location_Change_Action', locationFormatter };
 ```
 
+#### add location handler
+effect handler to process async effects and dispatch action to reducers
 
-### Build redux
 ```
-...
-import { ReduxCreator } from '@banbrick/react-utils';
-
-// build redux events, and get actions to tigger
-const actions = new ReduxCreator<Number>('count', 0)
-  .addReducer((state) => ++state, 'increment')
-  .build();
-
-@connect(
-  state => ({ count: state.count }),
-  dispatch => ({ increment: () => dispatch(actions.increment()) })
-)
-export class Counter extends React.Component<any> {
-  render() {
-    return (
-      <div>
-        <h1>Counter</h1>
-        <p>Current count: <strong>{this.props.count}</strong></p>
-        <button onClick={this.props.increment}>Increment</button>
-      </div>
-    )
-  }
-}
-```
-
-### Advanced Usage
-#### Effect handlers:  
-using ``AddEffectHanlder`` from creator, add an async promise effect process, will return in action as well
-  
-
-#### location handlers:    
-```
-export class WatherForecastState {
-  forecasts: any[];
+const locationHandler = async (store, location) {
+  // add your location handling logic
+  // for example::
+  // if (location.pathname == '/')
+  //   store.dispatch(action);
 }
 
-const locationHanlder = async (store: Store<ApplicationState>, location: Location) => {
-  var matches = matchPath(location.pathname,  { path: '/weather-forecast/:startDateIndex?'});
-
-  if (matches) {
-    const startDateIndex = (matches.params as any).startDateIndex;
-    const httpConfig = store.getState().httpConfig.config;
-    const forecasts = await new WeatherForecastSource(httpConfig).fetchdata(startDateIndex);
-
-    store.dispatch(watherForecastActions.setForcasts(forecasts));
-  }
-};
-
-export const watherForecastActions = 
-  new ReduxCreator<WatherForecastState>('watherForecast', new WatherForecastState())
-  .addReducer((state, forecasts) => ({ ...state, forecasts }), 'setForcasts')
-  .addLocationHandler(locationHanlder)
+const actions = new ReduxCreator()
+  .addLocationHandler(locationHandler)
   .build();
+
 ```
 
-by adding location handler you can run actions based on location change, reqiure to use ``ConnctedRouter``
-this will alloed you to call ``processLocationEvents`` to run location events explicitly
+### processLocationEvents
+this will alloed you to run location events explicitly
+
+### getEffectTasks
+this will allowed you to get current running effects, can be useful when doing SSR
+

@@ -1,5 +1,5 @@
 import { ReducersMapObject, Store, combineReducers } from 'redux';
-import { Reducer } from 'types';
+import { Reducer } from '../types';
 
 const reducerCollection: ReducersMapObject<any, any> = { }
 let staticStore: Store;

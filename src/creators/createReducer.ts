@@ -1,5 +1,5 @@
-import { ReducerHandler, ReducerEvent, ReducerEventParameters, ActionFunction1, Reducer } from 'types';
-import { uniqueId } from 'uniqueId';
+import { ReducerHandler, ReducerEvent, ReducerEventParameters, ActionFunction1, Reducer } from '../types';
+import { uniqueId } from '../uniqueId';
 
 export function createReducer<TState, TPayload>(handler: ReducerHandler<TState, TPayload>, name?: string): ReducerEvent<TState, TPayload> 
 {

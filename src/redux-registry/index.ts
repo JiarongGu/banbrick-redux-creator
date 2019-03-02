@@ -1,2 +1,2 @@
 export * from './registerReducers';
-export { registerStore, getCurrentStore } from './reducerRegistry';
+export { registerStore, getCurrentStore, buildRootReducer } from './reducerRegistry';
