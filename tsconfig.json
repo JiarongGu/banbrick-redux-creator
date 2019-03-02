@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "src",
     "outDir": "lib",
-    "module": "esnext",
+    "module": "commonjs",
     "moduleResolution": "node",
     "target": "es6",
     "lib": ["es6", "es7", "dom"],
@@ -11,7 +11,6 @@
     "declaration": true,
     "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
-    "importHelpers": true,
     "experimentalDecorators": true,
     "strict": true
   },
