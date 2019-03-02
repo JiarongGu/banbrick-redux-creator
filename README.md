@@ -5,8 +5,8 @@ for easier life on redux ``npm version 1.0.2``
 ```npm i @banbrick/redux-creator```
 
 ## Main APIs
-``configureStore``: create a store can use ReduxCreator
-``ReduxCreator``: main creator class to config store
+``configureStore``: create a store can use ReduxCreator  
+``ReduxCreator``: main creator class to config store  
 
 ## Create store
 ```
