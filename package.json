@@ -1,0 +1,41 @@
+{
+  "name": "@banbrick/redux-creator",
+  "version": "1.0.0",
+  "description": "redux creator for less boilerplate",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "build": "rm -rf lib/ && node ./node_modules/typescript/bin/tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JiarongGu/banbrick-redux-creator.git"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "utils"
+  ],
+  "author": "Jiarong Gu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JiarongGu/banbrick-redux-creator/issues"
+  },
+  "homepage": "https://github.com/JiarongGu/banbrick-redux-creator#readme",
+  "dependencies": {
+    "@types/history": "^4.*",
+    "@types/react-redux": "^7.*",
+    "@types/react-router": "^4.*",
+    "@types/redux": "^3.*",
+    "react": "*",
+    "react-redux": "*",
+    "react-router": "^4.*",
+    "redux": "*",
+    "redux-devtools-extension": "^2.*",
+    "tslint": "^5.12.1",
+    "typescript": "^3.3.3"
+  }
+}
