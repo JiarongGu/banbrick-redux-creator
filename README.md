@@ -13,7 +13,7 @@ import { configureStore } from '@banbrick/redux-creator';
 const store = configureStore({ reducers, initalState, middlewares, devTool: true });
 ```
   
-### build redcuers
+### add state and redcuers
 #### build reducers and state with ReduxCreator
 ```
 import { ReduxCreator } from '@banbrick/redux-creator';
@@ -26,7 +26,7 @@ const actions = new ReduxCreator('test', initalState)
 export testActions = { testAction: actions[0] }
 ```
   
-#### name your reducer actions
+#### name your actions
 actions will return by a object, you can name it or default by index start with 0
 ```
 const actions = new ReduxCreator('test', initalState)
