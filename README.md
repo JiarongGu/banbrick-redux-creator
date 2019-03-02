@@ -5,7 +5,7 @@ redux creator for less boilerplate
 ```npm i @banbrick/redux-creator```  
   
 ## How to use
-### configure store
+### Configure store
 create a store can use ReduxCreator with configureStore
 ```
 import { configureStore } from '@banbrick/redux-creator';
@@ -13,7 +13,7 @@ import { configureStore } from '@banbrick/redux-creator';
 const store = configureStore({ reducers, initalState, middlewares, devTool: true });
 ```
   
-### add state and redcuers
+### Add state and redcuers
 #### build reducers and state with ReduxCreator
 ```
 import { ReduxCreator } from '@banbrick/redux-creator';
@@ -91,9 +91,15 @@ const actions = new ReduxCreator()
 
 ```
   
-### processLocationEvents
+### Explicitly Process Location Events
+```
+import { processLocationEvents } from '@banbrick/redux-creator';
+```
 this will alloed you to run location events explicitly
   
-### getEffectTasks
+### Get running Effect Tasks
+```
+import { getEffectTasks } from '@banbrick/redux-creator';
+```
 this will allowed you to get current running effects, can be useful when doing SSR
   
