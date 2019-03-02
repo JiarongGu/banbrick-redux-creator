@@ -68,7 +68,9 @@ const locationFormatter: (payload) => payload.location;
 
 // location middleware config
 const locationMiddleware = { 
-  actionType: 'Location_Change'
+  actionType: 'Location_Change',
+  initalLocation: history.location,
+  reload: true // reload when location handler async-loaded by code-split
 };
 
 // set up location middleware when using configureStore
