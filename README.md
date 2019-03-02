@@ -5,12 +5,12 @@ for easier life on redux ``npm version 1.0.2``
 ```npm i @banbrick/redux-creator```
   
   
-## Main APIs
+## How to use
 ``configureStore``: create a store can use ReduxCreator  
 ``ReduxCreator``: main creator class to config store  
    
   
-## Create store
+### Create store
 ```
 import { configureStore } from '@banbrick/redux-creator';
 const store = configureStore({ reducers, initalState, middlewares, devTool: true });
@@ -18,9 +18,9 @@ const store = configureStore({ reducers, initalState, middlewares, devTool: true
 its also possible to add reducers and middlewares through this api
   
   
-## Use Redux Creator
+### Use Redux Creator
   
-### create state and reducers
+#### create state and reducers
 ```
 import { ReduxCreator } from '@banbrick/redux-creator';
 
@@ -47,7 +47,7 @@ export testActions = {
 }
 ```
   
-### add effect handler
+#### add effect handler
 effect handler to process async effects and dispatch action to reducers
 
 ```
