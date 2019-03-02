@@ -66,13 +66,15 @@ effect handlers behaves as same as reducer actions, you can name it or get by in
 
 ### Location Middleware
 
-#### Set up
+#### set up
+set up location middleware when using configureStore
 ```
 const locationMiddleware = { actionType: 'Location_Change_Action' };
-const store = configureStore<ApplicationState>({ locationMiddleware, devTool: true });
+const store = configureStore({ locationMiddleware, devTool: true });
 ```
 
-#### Config formatter to convert payload to location for location middleware
+#### config formatter
+convert payload to location for location middleware
 ```
 locationFormatter: (payload) => payload.location;
 const locationMiddleware = { actionType: 'Location_Change_Action', locationFormatter };
