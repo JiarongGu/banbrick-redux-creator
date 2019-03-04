@@ -1,7 +1,7 @@
 import { MiddlewareAPI, Dispatch, AnyAction } from 'redux';
 import { Location } from 'history';
 import { getCurrentStore } from '../redux-registry';
-import { PromiseMiddlewareHandlerEvent } from '../types';
+import { PromiseMiddlewareHandlerEvent, ActionFunctionAny } from '../types';
 
 const locationHanlderMap = new Map<string, PromiseMiddlewareHandlerEvent<Location>>();
 let locationHanlderEvents: Array<PromiseMiddlewareHandlerEvent<Location>> | undefined;
@@ -36,12 +36,21 @@ export async function processLocationTasks(store: MiddlewareAPI<any>, location: 
 }
 
 // add new location event and run location tasks after
-export async function registerLocationEvent(handlerEvent: PromiseMiddlewareHandlerEvent<Location>) {
-  locationHanlderMap.set(handlerEvent.action.toString(), handlerEvent);
+export async function registerLocationEvents(handlerEvents: Array<PromiseMiddlewareHandlerEvent<Location>>) {
+  handlerEvents.forEach(handlerEvent => {
+    locationHanlderMap.set(handlerEvent.action.toString(), handlerEvent);
+  });
+  
   locationHanlderEvents = undefined;
 
   if (locationReload)
     await processLocationTasks(getCurrentStore(), locationState);
+}
+
+export function unregisterLocationEvents(actions: Array<ActionFunctionAny>) {
+  actions.forEach(action => {
+    locationHanlderMap.delete(action.toString());
+  });
 }
 
 // get location events by priorities, higher will go first

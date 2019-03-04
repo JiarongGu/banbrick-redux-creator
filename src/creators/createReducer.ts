@@ -17,6 +17,7 @@ export function createComplexReducer<TState, TPayload>(event: ReducerEventParame
   };
   createdAction.toString = () => name;
   const createdReducer = event.reducer;
+  
   return {
     action: createdAction as ActionFunction1<TPayload>,
     reducer: createdReducer

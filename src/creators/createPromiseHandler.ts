@@ -5,9 +5,12 @@ export function createPromiseHandler<TPayload>(
   promisehandler: PromiseMiddlewareHandler<TPayload>, actionType?: string, priority?: number
 ): PromiseMiddlewareHandlerEvent<TPayload> {
   const hanlderActionType = actionType || uniqueId();
+
   const createdAction = function (payload: TPayload) {
     return ({ type: hanlderActionType, payload: payload });
   };
+
+  // override default toString, return action identifier
   createdAction.toString = () => hanlderActionType;
 
   return {

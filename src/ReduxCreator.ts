@@ -1,8 +1,8 @@
 import { Location } from 'history';
 import { PromiseMiddlewareHandlerEvent, ReducerEvent, ReducerHandler, PromiseMiddlewareHandler } from './types';
 import { registerReducer } from './redux-registry';
-import { registerEffectEvent } from './redux-effects-middleware';
-import { registerLocationEvent } from './redux-location-middleware';
+import { registerEffectEvents } from './redux-effects-middleware';
+import { registerLocationEvents } from './redux-location-middleware';
 import { createReducer, createPromiseHandler } from './creators';
 
 export class ReduxCreator<TState> {
@@ -29,9 +29,12 @@ export class ReduxCreator<TState> {
     const event = createReducer(handler, actionType);
     this.reducerEvents.push(event);
 
-    this.actions[actionName || this.actionCounter] = event.action;
-    this.actionCounter++;
+    if (actionName)
+      this.actions[actionName] = event.action;
 
+    this.actions[this.actionCounter] = event.action;
+    this.actionCounter++;
+    
     return this;
   }
 
@@ -39,7 +42,10 @@ export class ReduxCreator<TState> {
     const event = createPromiseHandler(handler, actionType);
     this.effectEvents.push(event);
 
-    this.actions[actionName || this.actionCounter] = event.action;
+    if (actionName)
+      this.actions[actionName] = event.action;
+
+    this.actions[this.actionCounter] = event.action;
     this.actionCounter++;
 
     return this;
@@ -48,6 +54,10 @@ export class ReduxCreator<TState> {
   addLocationHandler(handler: PromiseMiddlewareHandler<Location>, priority?: number, actionType?: string): ReduxCreator<TState> {
     const event = createPromiseHandler(handler, actionType, priority);
     this.locationEvents.push(event);
+
+    this.actions[this.actionCounter] = event.action;
+    this.actionCounter++;
+
     return this;
   }
 
@@ -60,13 +70,9 @@ export class ReduxCreator<TState> {
       });
     }
 
-    this.effectEvents.forEach(x => {
-      registerEffectEvent(x);
-    });
+    registerEffectEvents(this.effectEvents);
 
-    this.locationEvents.forEach(x => {
-      registerLocationEvent(x);
-    });
+    registerLocationEvents(this.locationEvents);
 
     return this.actions;
   }

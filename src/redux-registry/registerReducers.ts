@@ -1,11 +1,14 @@
 import { replaceReducer } from './reducerRegistry';
 import { ReducerRegistration, Reducer, ReducerEvent } from '../types';
 
+type Actions<TState> = { [key: string]: Reducer<TState, any> };
+
 function combineReducerEvents<TState>(initalState: TState, ...events: Array<ReducerEvent<TState, any>>): Reducer<TState, any> 
 {
-  const actions: { [key: string]: Reducer<TState, any> } = events.reduce((root, next) => {
+  const actions: Actions<TState> = events.reduce((root, next) => {
     return Object.assign(root, { [next.action.toString()]: next.reducer });
   }, {});
+
   return (state, action) => {
     if(!actions[action.type]) 
       return state || initalState;
