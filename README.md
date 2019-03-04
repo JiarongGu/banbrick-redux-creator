@@ -55,8 +55,13 @@ effect handler to process async effects and dispatch action to reducers
 ```javascript
 const effectHandler = async (store, payload) {
   // your effect logic, you can dispath store events by effect handler
+  store.dispatch(actions.setLoading(true));
+  const response = await axios.request('https://data');
+  store.dispatch(actions.setData(data));
+  store.dispatch(actions.setLoading(false));
 }
 
+// add effect handler
 const actions = new ReduxCreator()
   .addEffectHandler(effectHandler)
   .build();
