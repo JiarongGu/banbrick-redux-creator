@@ -18,7 +18,7 @@ const store = configureStore({
   reducers, // static reducers, built without creator
   initalState, // inital state
   middlewares, // addtional middlewares
-  devTool: true // true to use redux-dev-tool
+  devTool: true // enable redux-dev-tool
 });
 ```
   
