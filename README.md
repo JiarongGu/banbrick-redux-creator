@@ -13,7 +13,12 @@ create a store can use ReduxCreator with configureStore
 ```javascript
 import { configureStore } from '@banbrick/redux-creator';
 // its also possible to add reducers and middlewares through this api
-const store = configureStore({ reducers, initalState, middlewares, devTool: true });
+const store = configureStore({ 
+  reducers, // static reducers, built without creator
+  initalState, // inital state
+  middlewares, // addtional middlewares
+  devTool: true // true to use redux-dev-tool
+});
 ```
   
 ### Add state and redcuers
@@ -21,19 +26,25 @@ const store = configureStore({ reducers, initalState, middlewares, devTool: true
 ```javascript
 import { ReduxCreator } from '@banbrick/redux-creator';
 
+// create a reducer function
+const setPayload = (state, payload) => ({ ...state, payload });
+
 // build reducers with namespace and inital state
 const actions = new ReduxCreator('test', initalState)
-  .addReducer((state, payload) => ({ ...state, payload }))
+  .addReducer(setPayload)
   .build();
-  
+
+// export action to be used by dispatch 
 export testActions = { testAction: actions[0] }
 ```
   
 #### name your actions
 actions will return by a object, you can name it or default by index start with 0
 ```javascript
+const setPayload = (state, payload) => ({ ...state, payload });
+
 const actions = new ReduxCreator('test', initalState)
-  .addReducer((state, payload) => ({ ...state, payload }), 'testAction')
+  .addReducer(setPayload, 'testAction') //set action name
   .build();
   
 export testActions = { testAction: actions.testAction }
