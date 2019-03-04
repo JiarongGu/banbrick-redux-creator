@@ -12,6 +12,7 @@ redux creator for less boilerplate, also allow redux to be loaded by code split
 create a store can use ReduxCreator with configureStore
 ```javascript
 import { configureStore } from '@banbrick/redux-creator';
+
 // its also possible to add reducers and middlewares through this api
 const store = configureStore({ 
   reducers, // static reducers, built without creator
@@ -75,6 +76,7 @@ effect handlers behaves as same as reducer actions, you can name it or get by in
 #### add location event to history
 ```javascript
 const history = createBrowserHistory();
+
 history.listen((location) => {
   store.dispatch({ type: 'Location_Change', payload: history });
 });
