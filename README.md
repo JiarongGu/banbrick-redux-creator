@@ -68,7 +68,34 @@ const actions = new ReduxCreator()
   .build();
 ```
   
-effect handlers behaves as same as reducer actions, you can name it or get by index 
+effect handlers behaves as same as reducer actions, you can name it or get by index    
+    
+#### use accessor
+accessor will autogenrate a list of reducers based on initalstate or the property given.  
+```javascript
+const actions = new ReduxCreator('test', {
+    name: '',
+    value: '',
+  })
+  .addAccessor()
+  .build();
+
+export testActions = { accessor: actions[0] }
+```
+or
+```javascript
+const actions = new ReduxCreator('test', {})
+  .addAccessor(['name', 'value'], 'accessor')
+  .build();
+
+export testActions = { accessor: actions.accessor }
+```
+accessor is a key value pair for action function.  
+```javascript
+// create action by accessor to dispatch action for name value changes
+dispatch(accessor['name']('test name'));
+dispatch(accessor['value']('test value'));
+```  
 <br>
   
 ## Advanced Usage
