@@ -5,7 +5,7 @@ import { getReduxService, setReduxService } from './reduxServiceRegistry';
 import { registerEffectEvents } from '../redux-effects-middleware';
 
 export class ReduxService<TState> {
-  state?: TState;
+  state!: TState;
   _initializer?: ReduxServiceInitializer;
 
   constructor() {

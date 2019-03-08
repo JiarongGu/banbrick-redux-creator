@@ -15,7 +15,7 @@ export function reducer(target: ReduxService<any>, name: string, descriptor: Pro
       target.state = state;
       return handler.bind(target)(payload);
     };
-    const event = createReducer(reducer , `${namespace}-${name}`);
+    const event = createReducer(reducer , `@@Reducer:${namespace}-${name}`);
 
     if (!target._initializer)
       target._initializer = new ReduxServiceInitializer();

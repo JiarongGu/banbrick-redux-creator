@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
 import { configureStore } from '../src';
-import { ReduxService, reducer, defaultstate, effect, connectService } from '../src/redux-service';
+import { ReduxService, reducer, defaultState, effect, connectService } from '../src/redux-service';
 import { Provider } from 'react-redux';
 
 class TestState {
@@ -11,7 +11,7 @@ class TestState {
 }
 
 class TestService extends ReduxService<TestState> {
-  @defaultstate
+  @defaultState
   defaultState() {
     return new TestState();
   }

@@ -13,7 +13,7 @@ export function effect(target: ReduxService<any>, name: string, descriptor: Prop
   } else {
     const handler = descriptor.value.bind(target);
     const effectHandler = (store: any, payload: any) => handler(...payload);
-    const event = createPromiseHandler(effectHandler, `${namespace}-${name}`);
+    const event = createPromiseHandler(effectHandler, `@@Effect:${namespace}-${name}`);
 
     if (!target._initializer)
       target._initializer = new ReduxServiceInitializer();

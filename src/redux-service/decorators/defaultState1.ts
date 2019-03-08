@@ -2,7 +2,7 @@ import { ReduxService } from '../ReduxService';
 import { getReduxService } from '../reduxServiceRegistry';
 import { ReduxServiceInitializer } from '../ReduxServiceInitializer';
 
-export function defaultstate(target: ReduxService<any>, name: string, descriptor: PropertyDescriptor) {
+export function defaultState(target: ReduxService<any>, name: string, descriptor: PropertyDescriptor) {
   const namespace = target.namespace();
   const service = getReduxService(namespace);
   
