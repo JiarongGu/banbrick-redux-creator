@@ -41,6 +41,11 @@ class Test2Service extends ReduxService<number> {
   setName(name: string) {
     this.testService.setName(name);
   }
+
+  @effect
+  getGlobal(callback: (state: any) => void) {
+    callback(this.getRootState());
+  }
 }
 
 describe('redux service', () => {
@@ -66,6 +71,17 @@ describe('redux service', () => {
     const state = testService.getState();
     assert.equal('test name', state.name);
     assert.equal('test value', state.value);
+  });
+
+  it('can get root state in effect', () => {
+    const store = configureStore();
+    const testService = new TestService();
+    testService.setAll('test name', 'test value');
+    const test2Service = new Test2Service();
+    test2Service.getGlobal(x => {
+      assert.equal('test name', x['TestService'].name);
+      assert.equal('test value', x['TestService'].value);
+    });
   });
 
   it('can connect to component', () => {
