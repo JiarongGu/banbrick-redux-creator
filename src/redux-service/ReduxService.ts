@@ -18,17 +18,19 @@ export class ReduxService<TState> {
 
   build() {
     const namespace = this.namespace();
-
+    const initializer = this._initializer;
     if(getReduxService(namespace)) 
       return;
     
-    if(!this._initializer)
+    if(!initializer)
       return;
     
-    registerReducer({ namespace, initalState: this._initializer.initalState || null, reducerEvents: this._initializer.reducers });
-    registerEffectEvents(this._initializer.effects);
+    const initalState = initializer.initalState === undefined ? null : initializer.initalState;
+
+    registerReducer({ namespace, initalState: initalState, reducerEvents: initializer.reducers });
+    registerEffectEvents(initializer.effects);
     
-    setReduxService(namespace, this._initializer.actions);
+    setReduxService(namespace, initializer.actions);
   }
 
   dispatch(action: AnyAction) {
