@@ -1,5 +1,5 @@
-import { unregisterEffectEvents } from './redux-effects-middleware';
-import { unregisterLocationEvents } from './redux-location-middleware';
+import { unregisterEffectEvents } from '../redux-effects-middleware';
+import { unregisterLocationEvents } from '../redux-location-middleware';
 import { ActionFunctionAny } from 'types';
 
 export class ReduxAdjuster {
