@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
 import { configureStore } from '../src';
-import { ReduxService, reducer, defaultState, effect, connectService } from '../src/redux-service';
+import { ReduxService, reducer, begin, effect, connectService, inject } from '../src/redux-service';
 import { Provider } from 'react-redux';
 
 class TestState {
@@ -11,8 +11,8 @@ class TestState {
 }
 
 class TestService extends ReduxService<TestState> {
-  @defaultState
-  defaultState() {
+  @begin
+  begin() {
     return new TestState();
   }
 
@@ -30,6 +30,16 @@ class TestService extends ReduxService<TestState> {
   async setAll(name: string, value: string) {
     this.setName(name);
     this.setValue(value);
+  }
+}
+
+class Test2Service extends ReduxService<number> {
+  @inject(TestService)
+  testService!: TestService;
+
+  @effect
+  setName(name: string) {
+    this.testService.setName(name);
   }
 }
 
@@ -63,8 +73,21 @@ describe('redux service', () => {
     const testService = new TestService();
     testService.setAll('test name', 'test value');
     
-    const TestComponent = (props: { testService: TestService }) => {
-      return <div>{props.testService.state && props.testService.state.name}</div> 
+    const TestComponent = (props: { TestService: TestService }) => {
+      return <div>{props.TestService.state!.name}</div> 
+    }
+    const ConnectedComponent = connectService(TestService)(TestComponent) as any;
+    const app = <Provider store={store}><ConnectedComponent/></Provider>;
+    assert.equal('<div>test name</div>', renderToString(app));
+  });
+
+  it('can connect to non state service', () => {
+    const store = configureStore();
+    const test2Service = new Test2Service();
+    test2Service.setName('test name');
+    
+    const TestComponent = (props: { TestService: TestService }) => {
+      return <div>{props.TestService.state!.name}</div> 
     }
     const ConnectedComponent = connectService(TestService)(TestComponent) as any;
     const app = <Provider store={store}><ConnectedComponent/></Provider>;

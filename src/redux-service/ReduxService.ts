@@ -25,7 +25,7 @@ export class ReduxService<TState> {
     if(!this._initializer)
       return;
     
-    registerReducer({ namespace, initalState: this._initializer.initalState, reducerEvents: this._initializer.reducers });
+    registerReducer({ namespace, initalState: this._initializer.initalState || null, reducerEvents: this._initializer.reducers });
     registerEffectEvents(this._initializer.effects);
     
     setReduxService(namespace, this._initializer.actions);

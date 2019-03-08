@@ -9,13 +9,14 @@ export const effectsMiddleware: any = (store: MiddlewareAPI<any>) => (next: Disp
 
   if (handler) {
     const task = handler(store, action.payload);
-
-    effectTasks.push(task);
-
-    task.finally(() => {
-      const index = effectTasks.indexOf(task);
-      effectTasks.splice(index, 1);
-    });
+    if(task) {
+      effectTasks.push(task);
+  
+      task.finally(() => {
+        const index = effectTasks.indexOf(task);
+        effectTasks.splice(index, 1);
+      });
+    }
   }
   return next(action);
 };
