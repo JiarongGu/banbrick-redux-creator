@@ -14,11 +14,8 @@ export function reducer(target: any, name: string, descriptor: PropertyDescripto
   // build reducer event
   const handler = descriptor.value;
   const reducer = (state: any, payload: any) => {
-    if (!serviceBuilder.stateProp) {
-      throw new Error(`Reducer error, service: ${serviceBuilder.namespace}, has no state prop`);
-    }
     const newState = handler.bind(target)(payload);
-    target[serviceBuilder.stateProp] = newState;
+    target[serviceBuilder.stateProp!] = newState;
     return newState;
   };
   const event = createReducer(reducer);

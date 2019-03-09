@@ -19,6 +19,11 @@ export function service<T extends { new(...args: any[]): {} }>(constructor: T) {
         serviceBuilder.properties = properties;
         serviceBuilder.build(namespace, prototype);
       }
+
+      // remove all properties, so we only get them from prototype
+      Object.keys(this).forEach((key) => {
+        delete this[key]
+      });
     }
   };
 }

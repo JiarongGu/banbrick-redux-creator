@@ -12,8 +12,8 @@ class TestState {
 
 @service
 class TestService {
-  @state(new TestState())
-  state!: TestState;
+  @state
+  state = new TestState();
 
   @reducer
   setName(name: string) {
@@ -59,7 +59,6 @@ describe('redux service', () => {
     const store = configureStore();
     const testService1 = new TestService();
     const testService2 = new TestService();
-    
     assert.equal(testService1.state, testService2.state);
   });
 
@@ -79,6 +78,14 @@ describe('redux service', () => {
     const state = testService.state;
     assert.equal('test name', state.name);
     assert.equal('test value', state.value);
+  });
+
+  it('effect should work with multiple services', () => {
+    const store = configureStore();
+    const testService = new TestService();
+    const test2Service = new Test2Service();
+    test2Service.setName('new name hahah');
+    assert.equal('new name hahah', testService.state.name);
   });
 
   it('can connect to component', () => {

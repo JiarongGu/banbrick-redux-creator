@@ -3,7 +3,6 @@ import { registerReducer } from '../redux-registry';
 import { registerEffectEvents } from '../redux-effects-middleware';
 
 export class ReduxService {
-  state?: any;
   stateProp?: string;
   reducers: Array<ReducerEvent<any, any>>;
   effects: Array<PromiseMiddlewareHandlerEvent<any>>;
@@ -23,9 +22,16 @@ export class ReduxService {
   }
 
   build(namespace: string, prototype: any) {
+    // set default prototype values;
+    Object.keys(this.properties).forEach((key) => {
+      prototype[key] = this.properties[key];
+    });
+
     // if there is no reducers, do not add to store
-    if (this.reducers.length > 0) {
-      const initalState = this.state === undefined ? null : this.state;
+    if (this.stateProp && this.reducers.length > 0) {
+      const stateValue = this.properties[this.stateProp];
+      const initalState = stateValue === undefined ? null : stateValue;
+      
       registerReducer({ 
         namespace, initalState, reducerEvents: this.reducers 
       });
@@ -33,14 +39,6 @@ export class ReduxService {
 
     registerEffectEvents(this.effects);
     this.namespace = namespace;
-
-    // set default prototype values;
-    if(this.stateProp) {
-      prototype[this.stateProp] = this.state;
-    }
-    Object.keys(this.properties).forEach((key) => {
-      prototype[key] = this.properties[key];
-    });
     this.built = true;
   }
 }
