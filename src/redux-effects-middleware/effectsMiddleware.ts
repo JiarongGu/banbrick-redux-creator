@@ -9,9 +9,9 @@ export const effectsMiddleware: any = (store: MiddlewareAPI<any>) => (next: Disp
 
   if (handler) {
     const task = handler(store, action.payload);
-    if(task) {
+
+    if(task && task.then && task.finally) {
       effectTasks.push(task);
-  
       task.finally(() => {
         const index = effectTasks.indexOf(task);
         effectTasks.splice(index, 1);
