@@ -10,6 +10,7 @@
     "sourceMap": false,
     "declaration": true,
     "downlevelIteration": true,
+    "noImplicitAny": false,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
     "strict": true
