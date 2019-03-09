@@ -1,17 +1,16 @@
 import { ReduxService } from '../ReduxService';
-import { getReduxService } from '../reduxServiceRegistry';
-import { ReduxServiceInitializer } from '../ReduxServiceInitializer';
+import { getReduxServiceBuilder } from '../reduxServiceRegistry';
 
 export function begin(target: ReduxService<any>, name: string, descriptor: PropertyDescriptor) {
   const namespace = target.namespace();
-  const service = getReduxService(namespace);
+  const serviceBuilder = getReduxServiceBuilder(namespace);
   
-  if (!service) {
-    if (!target._initializer)
-      target._initializer = new ReduxServiceInitializer();
-      
-    target._initializer.initalState = descriptor.value();
-  }
+  if (serviceBuilder.initalState == undefined) {
+    const initalState = descriptor.value();
+    serviceBuilder.initalState = initalState;
 
+    if (target.state == undefined)
+      target.state = initalState;
+  }
   return descriptor;
 }

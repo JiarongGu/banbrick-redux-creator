@@ -1,11 +1,12 @@
-import { ActionFunctionAny } from '../types';
+import { ReduxServiceBuilder } from './ReduxServiceBuilder';
 
-const services = new Map<string, { [key: string]: ActionFunctionAny }>();
+const services = new Map<string, ReduxServiceBuilder>();
 
-export function getReduxService(key: string){
-  return services.get(key);
-}
-
-export function setReduxService(key:string, value: { [key: string]: ActionFunctionAny }) {
-  return services.set(key, value);
+export function getReduxServiceBuilder(key: string) {
+  let builder = services.get(key);
+  if (!builder) {
+    builder = new ReduxServiceBuilder();
+    services.set(key, builder);
+  }
+  return builder;
 }

@@ -92,7 +92,7 @@ describe('redux service', () => {
     const store = configureStore();
     const testService = new TestService();
     testService.setAll('test name', 'test value');
-    const state = testService.getState();
+    const state = testService.state;
     assert.equal('test name', state.name);
     assert.equal('test value', state.value);
   });
@@ -102,6 +102,7 @@ describe('redux service', () => {
     const testService = new TestService();
     testService.setAll('test name', 'test value');
     const test2Service = new Test2Service();
+
     test2Service.getGlobal(x => {
       assert.equal('test name', x['TestService'].name);
       assert.equal('test value', x['TestService'].value);

@@ -1,36 +1,18 @@
-import { AnyAction, Store } from 'redux';
-import { getCurrentStore, registerReducer } from '../redux-registry';
-import { ReduxServiceInitializer } from './ReduxServiceInitializer';
-import { getReduxService, setReduxService } from './reduxServiceRegistry';
-import { registerEffectEvents } from '../redux-effects-middleware';
+import { AnyAction } from 'redux';
+import { getCurrentStore } from '../redux-registry';
+import { getReduxServiceBuilder } from './reduxServiceRegistry';
 
 export class ReduxService<TState> {
   state!: TState;
-  _initializer?: ReduxServiceInitializer;
 
   constructor() {
-    this.build();
+    const namespace = this.namespace();
+    const serviceBuilder = getReduxServiceBuilder(namespace);
+    serviceBuilder.build(namespace);
   }
   
   namespace() {
     return this.constructor.name;
-  }
-
-  build() {
-    const namespace = this.namespace();
-    const initializer = this._initializer;
-    if(getReduxService(namespace)) 
-      return;
-    
-    if(!initializer)
-      return;
-    
-    const initalState = initializer.initalState === undefined ? null : initializer.initalState;
-
-    registerReducer({ namespace, initalState: initalState, reducerEvents: initializer.reducers });
-    registerEffectEvents(initializer.effects);
-    
-    setReduxService(namespace, initializer.actions);
   }
 
   dispatch(action: AnyAction) {
@@ -39,9 +21,5 @@ export class ReduxService<TState> {
 
   getRootState() {
     return getCurrentStore().getState();
-  }
-
-  getState(): TState {
-    return getCurrentStore().getState()[this.namespace()];
   }
 }
