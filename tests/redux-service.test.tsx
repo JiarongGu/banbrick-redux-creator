@@ -2,7 +2,7 @@ import { assert } from 'chai';
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
 import { configureStore } from '../src';
-import { ReduxService, reducer, begin, effect, connectService, prop } from '../src/redux-service';
+import { reducer, state, effect, connectService, service } from '../src/redux-service';
 import { Provider } from 'react-redux';
 
 class TestState {
@@ -10,11 +10,10 @@ class TestState {
   value: string = '';
 }
 
-class TestService extends ReduxService<TestState> {
-  @begin
-  begin() {
-    return new TestState();
-  }
+@service
+class TestService {
+  @state(new TestState())
+  state!: TestState;
 
   @reducer
   setName(name: string) {
@@ -33,21 +32,15 @@ class TestService extends ReduxService<TestState> {
   }
 }
 
-class Test2Service extends ReduxService<number> {
-  @prop(new TestService())
-  testService!: TestService;
-
-  @prop(0)
-  value!: number;
+@service
+class Test2Service {
+  name: string = 'test';
+  testService = new TestService();
+  value = 0;
 
   @effect
   setName(name: string) {
     this.testService.setName(name);
-  }
-
-  @effect
-  getGlobal(callback: (state: any) => void) {
-    callback(this.getRootState());
   }
 
   @effect
@@ -60,7 +53,6 @@ describe('redux service', () => {
   it('can use namespace', () => {
     const store = configureStore();
     const testService = new TestService();
-    assert.equal('TestService', testService.namespace());
   });
 
   it('state should be shared', () => {
@@ -75,17 +67,9 @@ describe('redux service', () => {
     const store = configureStore();
     const testService1 = new Test2Service();
     const testService2 = new Test2Service();
+
     testService2.setProp((prop) => { assert.equal(1, prop) });
     testService1.setProp((prop) => { assert.equal(2, prop) });
-  });
-
-  it('state should not be shared by root', () => {
-    const store = configureStore();
-    const testService1 = new TestService();
-    const reduxService = new ReduxService();
-    testService1.setName('new name');
-    
-    assert.notEqual(testService1.state, reduxService.state);
   });
   
   it('effect should work', () => {
@@ -95,18 +79,6 @@ describe('redux service', () => {
     const state = testService.state;
     assert.equal('test name', state.name);
     assert.equal('test value', state.value);
-  });
-
-  it('can get root state in effect', () => {
-    const store = configureStore();
-    const testService = new TestService();
-    testService.setAll('test name', 'test value');
-    const test2Service = new Test2Service();
-
-    test2Service.getGlobal(x => {
-      assert.equal('test name', x['TestService'].name);
-      assert.equal('test value', x['TestService'].value);
-    });
   });
 
   it('can connect to component', () => {

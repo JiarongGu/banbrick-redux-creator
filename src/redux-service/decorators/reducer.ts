@@ -1,13 +1,12 @@
-import { ReduxService } from '../ReduxService';
-import { getReduxServiceBuilder } from '../reduxServiceRegistry';
 import { createReducer } from '../../creators';
+import { getReduxService } from '../ReduxService';
+import { getCurrentStore } from '../../redux-registry';
 
-export function reducer(target: ReduxService<any>, name: string, descriptor: PropertyDescriptor) {
-  const namespace = target.namespace();
-  const serviceBuilder = getReduxServiceBuilder(namespace);
+export function reducer(target: any, name: string, descriptor: PropertyDescriptor) {
+  const serviceBuilder = getReduxService(target);
   const action = serviceBuilder.actions[name];
 
-  if(action) {
+  if(serviceBuilder.built) {
     descriptor.value = action;
     return descriptor;
   }
@@ -15,16 +14,18 @@ export function reducer(target: ReduxService<any>, name: string, descriptor: Pro
   // build reducer event
   const handler = descriptor.value;
   const reducer = (state: any, payload: any) => {
+    if (!serviceBuilder.stateProp) {
+      throw new Error(`Reducer error, service: ${serviceBuilder.namespace}, has no state prop`);
+    }
     const newState = handler.bind(target)(payload);
-    target.state = newState;
-
+    target[serviceBuilder.stateProp] = newState;
     return newState;
   };
-  const event = createReducer(reducer , `@@Reducer:${namespace}-${name}`);
+  const event = createReducer(reducer);
   serviceBuilder.reducers.push(event);
 
   // build dispatch action
-  const dispatchAction = (payload: any) => target.dispatch(event.action(payload));
+  const dispatchAction = (payload: any) => getCurrentStore().dispatch(event.action(payload));
   serviceBuilder.actions[name] = dispatchAction;
   descriptor.value = dispatchAction;
 

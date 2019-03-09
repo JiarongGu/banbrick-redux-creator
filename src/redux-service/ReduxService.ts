@@ -1,25 +1,53 @@
-import { AnyAction } from 'redux';
-import { getCurrentStore } from '../redux-registry';
-import { getReduxServiceBuilder } from './reduxServiceRegistry';
+import { ReducerEvent, PromiseMiddlewareHandlerEvent, ActionFunctionAny } from '../types';
+import { registerReducer } from '../redux-registry';
+import { registerEffectEvents } from '../redux-effects-middleware';
 
-export class ReduxService<TState> {
-  state!: TState;
+export class ReduxService {
+  state?: any;
+  stateProp?: string;
+  reducers: Array<ReducerEvent<any, any>>;
+  effects: Array<PromiseMiddlewareHandlerEvent<any>>;
+  location: Array<PromiseMiddlewareHandlerEvent<Location>>;
+  actions: { [key: string]: ActionFunctionAny };
+  built: boolean;
+  namespace!: string;
+  properties: { [key: string]: any};
 
   constructor() {
-    const namespace = this.namespace();
-    const serviceBuilder = getReduxServiceBuilder(namespace);
-    serviceBuilder.build(namespace);
-  }
-  
-  namespace() {
-    return this.constructor.name;
-  }
-
-  dispatch(action: AnyAction) {
-    return getCurrentStore().dispatch(action);
+    this.reducers = [];
+    this.effects = [];
+    this.location = [];
+    this.actions = {};
+    this.properties = {};
+    this.built = false;
   }
 
-  getRootState() {
-    return getCurrentStore().getState();
+  build(namespace: string, prototype: any) {
+    // if there is no reducers, do not add to store
+    if (this.reducers.length > 0) {
+      const initalState = this.state === undefined ? null : this.state;
+      registerReducer({ 
+        namespace, initalState, reducerEvents: this.reducers 
+      });
+    }
+
+    registerEffectEvents(this.effects);
+    this.namespace = namespace;
+
+    // set default prototype values;
+    if(this.stateProp) {
+      prototype[this.stateProp] = this.state;
+    }
+    Object.keys(this.properties).forEach((key) => {
+      prototype[key] = this.properties[key];
+    });
+    this.built = true;
   }
+}
+
+export function getReduxService(prototype: any): ReduxService {
+  if (!prototype._serviceBuilder) {
+    prototype._serviceBuilder = new ReduxService();
+  }
+  return prototype._serviceBuilder;
 }

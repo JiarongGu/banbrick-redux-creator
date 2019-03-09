@@ -27,6 +27,7 @@ export function configureStore<TState>(config?: StoreConfiguration<TState, any>)
   const composedMiddlewares = devTool ? composeWithDevTools(middlewares): compose(middlewares);
 
   const combinedReducer = buildRootReducer<TState>({ ...configReducers });
+  
   const store = createStore(combinedReducer as any, initalState, composedMiddlewares) as Store<TState>;
   registerStore(store);
   return store;

@@ -1,0 +1,24 @@
+import { getReduxService } from '../ReduxService';
+
+export function service<T extends { new(...args: any[]): {} }>(constructor: T) {
+  const namespace = constructor.name;
+  const prototype = constructor.prototype;
+  const serviceBuilder = getReduxService(prototype);
+
+  return class extends constructor {
+    constructor(...args) {
+      super(...args);
+
+      // do not build second time
+      if(!serviceBuilder.built) {
+        const properties = Object.keys(this).reduce((properties, key) => {
+          properties[key] = this[key];
+          return properties;
+        }, {});
+        
+        serviceBuilder.properties = properties;
+        serviceBuilder.build(namespace, prototype);
+      }
+    }
+  };
+}
