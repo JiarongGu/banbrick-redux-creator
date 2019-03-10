@@ -15,7 +15,7 @@ export function connectService(...services: Array<{ new(): {} }>) {
   return connect(
     createMapStateToProps(namespaces),
     createMapDispatchToProps(reduxServices),
-    createMergeProps(namespaces)
+    createMergeProps(reduxServices)
   )
 }
 
@@ -37,12 +37,13 @@ function createMapDispatchToProps(reduxServices: Array<ReduxService>) {
   };
 }
 
-function createMergeProps(namespaces: Array<string>) {
+function createMergeProps(reduxServices: Array<ReduxService>) {
   return function (stateProps, dispatchProps, ownProps) {
-    return namespaces.reduce((accumulate, namespace) => {
-      accumulate[namespace] = {
-        ...dispatchProps[namespace],
-        state: stateProps[namespace]
+    return reduxServices.reduce((accumulate, service) => {
+      const state = service.stateProp ? { [service.stateProp]: stateProps[service.namespace] } : undefined;
+      accumulate[service.namespace] = {
+        ...dispatchProps[service.namespace],
+        ...state
       };
       return accumulate;
     }, { ...ownProps })
