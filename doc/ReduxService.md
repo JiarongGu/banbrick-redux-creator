@@ -30,6 +30,7 @@ setup reducer logic, `@reducer` function will dispatch changes to state without 
 
 ## @effect
 ```javascript
+@effect
 updateAll(value: number) {
   this.decrement(value);
   this.increment(value);
