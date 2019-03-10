@@ -10,7 +10,7 @@ class TestState {
   value: string = '';
 }
 
-@service
+@service('TestService')
 class TestService {
   @state
   state = new TestState();
@@ -32,7 +32,7 @@ class TestService {
   }
 }
 
-@service
+@service('Test2Service')
 class Test2Service {
   name: string = 'test';
   testService = new TestService();

@@ -1,6 +1,6 @@
-import { createReducer } from '../../creators';
-import { getReduxService } from '../ReduxService';
-import { getCurrentStore } from '../../redux-registry';
+import { createReducer } from '../creators';
+import { getReduxService } from './ReduxService';
+import { getCurrentStore } from '../redux-registry';
 
 export function reducer(target: any, name: string, descriptor: PropertyDescriptor) {
   const serviceBuilder = getReduxService(target);

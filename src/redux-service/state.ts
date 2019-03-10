@@ -1,4 +1,4 @@
-import { getReduxService } from '../ReduxService';
+import { getReduxService } from './ReduxService';
 
 export function state(target: any, name: string) {
   const serviceBuilder = getReduxService(target);

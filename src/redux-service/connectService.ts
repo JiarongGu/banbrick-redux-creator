@@ -10,8 +10,8 @@ export function connectService(...services: Array<{ new(): {} }>) {
       new service();
     return reduxService
   });
-  const namespaces = reduxServices.map(service => service.namespace);
 
+  const namespaces = reduxServices.map(service => service.namespace);
   return connect(
     createMapStateToProps(namespaces),
     createMapDispatchToProps(reduxServices),

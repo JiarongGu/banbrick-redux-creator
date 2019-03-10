@@ -1,7 +1,7 @@
 
-import { createPromiseHandler } from '../../creators';
-import { getCurrentStore } from '../../redux-registry';
-import { getReduxService } from '../ReduxService';
+import { createPromiseHandler } from '../creators';
+import { getCurrentStore } from '../redux-registry';
+import { getReduxService } from './ReduxService';
 
 export function effect(target: any, name: string, descriptor: PropertyDescriptor) {
   const serviceBuilder = getReduxService(target);
