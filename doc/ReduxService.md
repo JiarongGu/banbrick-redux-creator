@@ -5,7 +5,7 @@
 @service('CounterService')
 class CounterService { ... }
 ```
-set the class as redux service
+set the class as redux service, the name of service use to locate the service in props
 
 ## @state
 ```javascript
