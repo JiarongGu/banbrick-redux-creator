@@ -1,6 +1,8 @@
 # ReduxService
-using service class instead of creating delicated redux methods, all instance created by service class will shared in the same scope of its prototype
+using decorators to create redux service class, can access redux state using class from everywhere you want.
+- decorators: `@service`, `@state`, `@reducer`, `@effect`, `@connect`.  
 
+hint: all instance created by service class will shared in the same scope of its prototype.
 
 ## @service
 ```javascript
@@ -28,7 +30,7 @@ increment(value: number) {
 }
 ```
 setup reducer logic, `@reducer` function will dispatch changes to state without using `dispatch`
-<span style="color:red;">warning: do not call reducer function in side reducer, use effect to do it</span>
+warning: do not call reducer function in side reducer, use effect to do it
 
 ## @effect
 ```javascript
@@ -64,6 +66,8 @@ properties can be used by class property or through constructor, can be accessed
 
 ## Example
 ```javascript
+import { service, state, reducer, effect, connect } from '@banbrick/react-creator'
+
 @service('CounterService')
 class CounterService {
   @state
