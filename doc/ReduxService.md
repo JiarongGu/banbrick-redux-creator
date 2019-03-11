@@ -20,7 +20,8 @@ state = {
   total: 0 
 };
 ```
-configure inital state, can access state in service class by `this.state`
+configure inital state, can access state in service class by `this.state`,
+state will be initalized base on this or inheritant from current store
 
 ## @reducer
 reducer will only return state
