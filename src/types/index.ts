@@ -55,7 +55,6 @@ export interface LocationMiddlewareConfig<TPayload> {
   actionType: string;
   initalLocation: Location;
   locationFormatter?: (payload: TPayload) => Location;
-  reload?: boolean;
 }
 
 export interface StoreConfiguration<TState, TPayload> {
@@ -65,5 +64,4 @@ export interface StoreConfiguration<TState, TPayload> {
   locationMiddleware?: LocationMiddlewareConfig<TPayload>;
   devTool?: boolean;
 }
-
-export type Constructor<T> = { new(): T };
+export type Constructor<T = any, A = any> = { new(...args: Array<A>): T };

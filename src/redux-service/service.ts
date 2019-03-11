@@ -1,7 +1,8 @@
 import { getReduxServiceBuilder } from './ReduxServiceBuilder';
+import { Constructor } from '../types';
 
 export function service(namespace: string) {
-  return function<T extends { new(...args: any[]): {} }>(constructor: T) {
+  return function<T extends Constructor>(constructor: T) {
     const prototype = constructor.prototype;
     const serviceBuilder = getReduxServiceBuilder(prototype);
   

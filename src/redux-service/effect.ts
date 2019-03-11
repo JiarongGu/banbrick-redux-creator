@@ -17,7 +17,7 @@ export function effect(target: any, name: string, descriptor: PropertyDescriptor
   serviceBuilder.effects.push(event);
 
   // create dispatch action
-  const dispatchAction = (...args: any[]) => serviceBuilder.dispatch(event.action(args));
+  const dispatchAction = (...payloads: any[]) => serviceBuilder.dispatch(event.action(payloads));
   serviceBuilder.actions[name] = dispatchAction;
   descriptor.value = dispatchAction;
 
