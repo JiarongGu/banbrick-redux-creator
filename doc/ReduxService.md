@@ -1,4 +1,6 @@
 # ReduxService
+using service class instead of creating delicated redux methods, all instance created by service class will shared in the same scope of its prototype
+
 
 ## @service
 ```javascript
