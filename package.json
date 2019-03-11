@@ -1,6 +1,6 @@
 {
   "name": "@banbrick/redux-creator",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "redux creator for less boilerplate",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

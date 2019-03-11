@@ -3,25 +3,32 @@ import { Dispatch, AnyAction } from 'redux';
 import { ReducerEvent, PromiseMiddlewareHandlerEvent, ActionFunctionAny } from '../types';
 import { registerReducer, getCurrentStore } from '../redux-registry';
 import { registerEffectEvents } from '../redux-effects-middleware';
-import { ReactReduxContext } from 'react-redux';
+import { registerLocationEvents } from '../redux-location-middleware';
+import { Location } from 'history';
 
 export class ReduxServiceBuilder {
+  namespace!: string;
   stateProp?: string;
+  locationReload: boolean;
+  properties: { [key: string]: any};
+
   reducers: Array<ReducerEvent<any, any>>;
   effects: Array<PromiseMiddlewareHandlerEvent<any>>;
-  location: Array<PromiseMiddlewareHandlerEvent<Location>>;
+  locations: Array<PromiseMiddlewareHandlerEvent<Location>>;
   actions: { [key: string]: ActionFunctionAny };
+  linkedServices: Array<ReduxServiceBuilder>;
+
+  dispatch!: Dispatch<AnyAction>;
   built: boolean;
-  properties: { [key: string]: any};
-  namespace!: string;
-  dispatch!: Dispatch<AnyAction>
   
   constructor() {
     this.reducers = [];
     this.effects = [];
-    this.location = [];
+    this.locations = [];
+    this.linkedServices = [];
     this.actions = {};
     this.properties = {};
+    this.locationReload = false;
     this.built = false;
   }
 
@@ -51,6 +58,8 @@ export class ReduxServiceBuilder {
     }
 
     registerEffectEvents(this.effects);
+    registerLocationEvents(this.locations, this.locationReload);
+    
     this.namespace = namespace;
     this.built = true;
   }

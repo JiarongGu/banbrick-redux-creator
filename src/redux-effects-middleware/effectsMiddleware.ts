@@ -8,16 +8,15 @@ export const effectsMiddleware: any = (store: MiddlewareAPI<any>) => (next: Disp
   const handler = effectsHandlerMap.get(action.type);
 
   if (handler) {
-    // if we found effect instead call next middleware
-    // process the handler and return the result
+    // if we found effect instead call next middleware, process the handler and return the result
     const task = handler(store, action.payload);
 
-    if(task && task.then && task.finally) {
-      effectTasks.push(task);
-      task.finally(() => {
-        const index = effectTasks.indexOf(task);
-        effectTasks.splice(index, 1);
-      });
+    if(task && task.then) {
+      // push promise task to queue
+      effectTasks.push(task.then((res) => {
+        effectTasks.splice(effectTasks.indexOf(task), 1);
+        return res;
+      }));
     }
     return task;
   }

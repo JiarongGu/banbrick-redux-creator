@@ -11,6 +11,7 @@ export class ReduxCreator<TState> {
   private reducerEvents: Array<ReducerEvent<TState, any>>;
   private effectEvents: Array<PromiseMiddlewareHandlerEvent<any>>;
   private locationEvents: Array<PromiseMiddlewareHandlerEvent<Location>>;
+  private locationReload: boolean;
   private actionCounter: number;
   private actions: any;
 
@@ -23,24 +24,25 @@ export class ReduxCreator<TState> {
     this.reducerEvents = [];
     this.effectEvents = [];
     this.locationEvents = [];
+    this.locationReload = false;
   }
 
   addAccessor(setters?: Array<string>, actionName?: string): ReduxCreator<TState> {
     let setterNames: Array<string> = [];
 
     // get setter names
-    if(setters) {
+    if (setters) {
       setterNames = setters;
     } else {
       setterNames = Object.keys(this.initalState || {});
     }
 
-    if (setterNames.length == 0) 
+    if (setterNames.length == 0)
       return this;
 
     // get reducer events
-    const reducerEvents = setterNames.map(x => ({ 
-      name: x, 
+    const reducerEvents = setterNames.map(x => ({
+      name: x,
       event: createReducer((state: TState, payload: any): any => ({ ...state, [x]: payload }))
     }));
 
@@ -49,17 +51,17 @@ export class ReduxCreator<TState> {
 
     // create state accessor
     const accessor = reducerEvents.reduce<{ [key: string]: ActionFunctionAny }>(
-      (a, c) => { 
-        a[c.name] = c.event.action; 
+      (a, c) => {
+        a[c.name] = c.event.action;
         return a;
       }, {}
-    ); 
+    );
 
     if (actionName)
       this.actions[actionName] = accessor;
 
     this.actions[this.actionCounter] = accessor;
-    
+
     this.actionCounter++;
 
     return this;
@@ -74,7 +76,7 @@ export class ReduxCreator<TState> {
 
     this.actions[this.actionCounter] = event.action;
     this.actionCounter++;
-    
+
     return this;
   }
 
@@ -91,12 +93,15 @@ export class ReduxCreator<TState> {
     return this;
   }
 
-  addLocationHandler(handler: PromiseMiddlewareHandler<Location>, priority?: number, actionType?: string): ReduxCreator<TState> {
+  addLocationHandler(handler: PromiseMiddlewareHandler<Location>, reload: boolean, priority?: number, actionType?: string): ReduxCreator<TState> {
     const event = createPromiseHandler(handler, actionType, priority);
     this.locationEvents.push(event);
 
     this.actions[this.actionCounter] = event.action;
     this.actionCounter++;
+
+    if (reload)
+      this.locationReload = true;
 
     return this;
   }
@@ -112,7 +117,7 @@ export class ReduxCreator<TState> {
 
     registerEffectEvents(this.effectEvents);
 
-    registerLocationEvents(this.locationEvents);
+    registerLocationEvents(this.locationEvents, this.locationReload);
 
     return this.actions;
   }

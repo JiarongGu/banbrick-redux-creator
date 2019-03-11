@@ -15,8 +15,7 @@ export function configureStore<TState>(config?: StoreConfiguration<TState, any>)
   const locationMiddleware = locationConfig && createLocationMiddleware(
     locationConfig.actionType, 
     locationConfig.initalLocation, 
-    locationConfig.locationFormatter, 
-    locationConfig.reload
+    locationConfig.locationFormatter
   );
   
   const applyMiddlewares = configMiddlewares.concat([effectsMiddleware]);

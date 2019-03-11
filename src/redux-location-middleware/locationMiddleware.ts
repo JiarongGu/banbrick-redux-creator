@@ -6,16 +6,13 @@ import { PromiseMiddlewareHandlerEvent, ActionFunctionAny } from '../types';
 const locationHanlderMap = new Map<string, PromiseMiddlewareHandlerEvent<Location>>();
 let locationHanlderEvents: Array<PromiseMiddlewareHandlerEvent<Location>> | undefined;
 let locationState: Location;
-let locationReload: boolean;
 
 // create location middleware which will process location events
 export function createLocationMiddleware<TPayload>(
   locationActionType: string,
   initallocation: Location,
-  locationFormatter?: (payload: TPayload) => Location,
-  reload?: boolean,
+  locationFormatter?: (payload: TPayload) => Location
 ) {
-  locationReload = !!reload;
   locationState = initallocation;
 
   return (store: MiddlewareAPI<any>) => (next: Dispatch<AnyAction>) => (action: AnyAction) => {
@@ -36,7 +33,7 @@ export async function processLocationTasks(store: MiddlewareAPI<any>, location: 
 }
 
 // add new location event and run location tasks after
-export async function registerLocationEvents(handlerEvents: Array<PromiseMiddlewareHandlerEvent<Location>>) {
+export async function registerLocationEvents(handlerEvents: Array<PromiseMiddlewareHandlerEvent<Location>>, locationReload: boolean) {
   handlerEvents.forEach(handlerEvent => {
     locationHanlderMap.set(handlerEvent.action.toString(), handlerEvent);
   });
