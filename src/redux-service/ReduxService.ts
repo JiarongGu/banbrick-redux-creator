@@ -1,5 +1,5 @@
 import { ReducerEvent, PromiseMiddlewareHandlerEvent, ActionFunctionAny } from '../types';
-import { registerReducer } from '../redux-registry';
+import { registerReducer, getCurrentStore } from '../redux-registry';
 import { registerEffectEvents } from '../redux-effects-middleware';
 
 export class ReduxService {
@@ -29,9 +29,13 @@ export class ReduxService {
 
     // if there is no reducers, do not add to store
     if (this.stateProp && this.reducers.length > 0) {
-      const stateValue = this.properties[this.stateProp];
-      const initalState = stateValue === undefined ? null : stateValue;
+      const currentState = getCurrentStore().getState()[namespace];
+      const serviceState = currentState || this.properties[this.stateProp];
+      const initalState = serviceState === undefined ? null : serviceState;
       
+      // match the prototype state to initalState
+      prototype[this.stateProp] = initalState;
+
       registerReducer({ 
         namespace, initalState, reducerEvents: this.reducers 
       });

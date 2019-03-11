@@ -1,9 +1,10 @@
 import { assert } from 'chai';
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
-import { configureStore } from '../src';
+import { configureStore, StoreConfiguration } from '../src';
 import { reducer, state, effect, connectService, service } from '../src/redux-service';
 import { Provider } from 'react-redux';
+import { getReduxService } from '../src/redux-service/ReduxService';
 
 class TestState {
   name: string = '';
@@ -49,21 +50,30 @@ class Test2Service {
   }
 }
 
+function initalizeStore (config?: StoreConfiguration<any, any>) {
+  const store = configureStore(config);
+
+  // reset services
+  getReduxService(TestService.prototype).built = false;
+  getReduxService(Test2Service.prototype).built = false;
+  return store;
+}
+
 describe('redux service', () => {
   it('can use namespace', () => {
-    const store = configureStore();
+    const store = initalizeStore();
     const testService = new TestService();
   });
 
   it('state should be shared', () => {
-    const store = configureStore();
+    const store = initalizeStore();
     const testService1 = new TestService();
     const testService2 = new TestService();
     assert.equal(testService1.state, testService2.state);
   });
 
   it('prop can be shared between sevices', () => {
-    const store = configureStore();
+    const store = initalizeStore();
     const testService1 = new Test2Service();
     const testService2 = new Test2Service();
 
@@ -72,7 +82,7 @@ describe('redux service', () => {
   });
   
   it('effect should work', () => {
-    const store = configureStore();
+    const store = initalizeStore();
     const testService = new TestService();
     testService.setAll('test name', 'test value');
     const state = testService.state;
@@ -81,7 +91,7 @@ describe('redux service', () => {
   });
 
   it('effect should work with multiple services', () => {
-    const store = configureStore();
+    const store = initalizeStore();
     const testService = new TestService();
     const test2Service = new Test2Service();
     test2Service.setName('new name hahah');
@@ -102,7 +112,7 @@ describe('redux service', () => {
   });
 
   it('can connect to non state service', () => {
-    const store = configureStore();
+    const store = initalizeStore();
     const test2Service = new Test2Service();
     test2Service.setName('test name');
     
@@ -112,5 +122,19 @@ describe('redux service', () => {
     const ConnectedComponent = connectService(TestService)(TestComponent) as any;
     const app = <Provider store={store}><ConnectedComponent/></Provider>;
     assert.equal('<div>test name</div>', renderToString(app));
+  });
+
+  it('can inhirtent the state form initial state', () => {
+    const state = {
+      name: 'initalized name'
+    };
+    const store = initalizeStore({
+      initalState: {
+        TestService: state
+      }
+    });
+    const testService = new TestService();
+
+    assert.equal(state, testService.state);
   });
 })
