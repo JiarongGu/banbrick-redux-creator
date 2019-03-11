@@ -23,6 +23,7 @@ state = {
 configure inital state, can access state in service class by `this.state`
 
 ## @reducer
+reducer will only return state
 ```javascript
 @reducer
 increment(value: number) {
@@ -33,6 +34,7 @@ setup reducer logic, `@reducer` function will dispatch changes to state without 
 warning: do not call reducer function in side reducer, use effect to do it
 
 ## @effect
+effect will only return promise or void.
 ```javascript
 @effect
 updateAll(value: number) {
@@ -65,6 +67,7 @@ properties can be used by class property or through constructor, can be accessed
 
 
 ## Example
+### Create ReduxService class
 ```javascript
 import { service, state, reducer, effect, connect } from '@banbrick/react-creator'
 
@@ -97,7 +100,10 @@ class CounterService {
     this.increment(value);
   }
 }
+```
 
+### Connect to component
+```javascript
 @connect(CounterService)
 class Counter extends React.Component {
   render() {
@@ -114,4 +120,10 @@ class Counter extends React.Component {
     )
   }
 }
+```
+
+### Use outside of component
+```javascript
+const counterService = new CounterService();
+const counterState = counterService.increment(10);
 ```
