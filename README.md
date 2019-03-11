@@ -1,6 +1,6 @@
 # [@banbrick/redux-creator](https://www.npmjs.com/package/@banbrick/redux-creator)  
 redux creator for less boilerplate, also allow redux to be loaded by code split.    
-`current version 1.4.1`
+`current version 1.4.2`
 
 ## Install
 ```npm i @banbrick/redux-creator```  
