@@ -1,11 +1,11 @@
 import { connect } from "react-redux";
 import { Dispatch } from "react";
 import { AnyAction } from "redux";
-import { getReduxService, ReduxService } from "./ReduxService";
+import { getReduxServiceBuilder, ReduxServiceBuilder } from "./ReduxServiceBuilder";
 
 export function connectService(...services: Array<{ new(): {} }>) {
   const reduxServices = services.map(service => {
-    const reduxService = getReduxService(service.prototype);
+    const reduxService = getReduxServiceBuilder(service.prototype);
     if (!reduxService.built)
       new service();
     return reduxService
@@ -28,16 +28,16 @@ function createMapStateToProps(namespaces: Array<string>) {
   };
 }
 
-function createMapDispatchToProps(reduxServices: Array<ReduxService>) {
+function createMapDispatchToProps(serviceBuilders: Array<ReduxServiceBuilder>) {
   return function (dispatch: Dispatch<AnyAction>) {
-    return reduxServices.reduce((accumulate, service) => {
+    return serviceBuilders.reduce((accumulate, service) => {
       accumulate[service.namespace] = service.actions;
       return accumulate;
     }, {});
   };
 }
 
-function createMergeProps(reduxServices: Array<ReduxService>) {
+function createMergeProps(reduxServices: Array<ReduxServiceBuilder>) {
   return function (stateProps, dispatchProps, ownProps) {
     return reduxServices.reduce((accumulate, service) => {
       const state = service.stateProp ? { [service.stateProp]: stateProps[service.namespace] } : undefined;

@@ -9,7 +9,6 @@ export const effectsMiddleware: any = (store: MiddlewareAPI<any>) => (next: Disp
 
   if (handler) {
     const task = handler(store, action.payload);
-
     if(task && task.then && task.finally) {
       effectTasks.push(task);
       task.finally(() => {

@@ -1,10 +1,11 @@
 import { assert } from 'chai';
 import * as React from 'react';
 import { renderToString } from 'react-dom/server';
-import { configureStore, StoreConfiguration } from '../src';
+import { configureStore, StoreConfiguration, getEffectTasks } from '../src';
 import { reducer, state, effect, connectService, service } from '../src/redux-service';
 import { Provider } from 'react-redux';
-import { getReduxService } from '../src/redux-service/ReduxService';
+import { getReduxServiceBuilder } from '../src/redux-service/ReduxServiceBuilder';
+import { getCurrentStore } from '../src/redux-registry';
 
 class TestState {
   name: string = '';
@@ -54,8 +55,8 @@ function initalizeStore (config?: StoreConfiguration<any, any>) {
   const store = configureStore(config);
 
   // reset services
-  getReduxService(TestService.prototype).built = false;
-  getReduxService(Test2Service.prototype).built = false;
+  getReduxServiceBuilder(TestService.prototype).built = false;
+  getReduxServiceBuilder(Test2Service.prototype).built = false;
   return store;
 }
 
@@ -99,10 +100,9 @@ describe('redux service', () => {
   });
 
   it('can connect to component', () => {
-    const store = configureStore();
+    const store = initalizeStore();
     const testService = new TestService();
     testService.setAll('test name', 'test value');
-    
     const TestComponent = (props: { TestService: TestService }) => {
       return <div>{props.TestService.state!.name}</div> 
     }

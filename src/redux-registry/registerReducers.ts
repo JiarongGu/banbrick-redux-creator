@@ -1,4 +1,4 @@
-import { replaceReducer } from './reducerRegistry';
+import { addReducer } from './reducerRegistry';
 import { ReducerRegistration, Reducer, ReducerEvent } from '../types';
 
 type Actions<TState> = { [key: string]: Reducer<TState, any> };
@@ -18,5 +18,5 @@ function combineReducerEvents<TState>(initalState: TState, ...events: Array<Redu
 
 export function registerReducer<TState>(registration: ReducerRegistration<TState>) {
   var combinedReducer = combineReducerEvents(registration.initalState, ...registration.reducerEvents);
-  replaceReducer(registration.namespace, combinedReducer);
+  addReducer(registration.namespace, combinedReducer);
 }

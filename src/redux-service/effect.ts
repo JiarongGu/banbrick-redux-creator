@@ -1,10 +1,9 @@
 
 import { createPromiseHandler } from '../creators';
-import { getCurrentStore } from '../redux-registry';
-import { getReduxService } from './ReduxService';
+import { getReduxServiceBuilder } from './ReduxServiceBuilder';
 
 export function effect(target: any, name: string, descriptor: PropertyDescriptor) {
-  const serviceBuilder = getReduxService(target);
+  const serviceBuilder = getReduxServiceBuilder(target);
 
   if(serviceBuilder.built) {
     descriptor.value = serviceBuilder.actions[name];
@@ -18,7 +17,7 @@ export function effect(target: any, name: string, descriptor: PropertyDescriptor
   serviceBuilder.effects.push(event);
 
   // create dispatch action
-  const dispatchAction = (...args: any[]) => getCurrentStore().dispatch(event.action(args));
+  const dispatchAction = (...args: any[]) => serviceBuilder.dispatch(event.action(args));
   serviceBuilder.actions[name] = dispatchAction;
   descriptor.value = dispatchAction;
 

@@ -1,7 +1,7 @@
-import { getReduxService } from './ReduxService';
+import { getReduxServiceBuilder } from './ReduxServiceBuilder';
 
 export function state(target: any, name: string) {
-  const serviceBuilder = getReduxService(target);
+  const serviceBuilder = getReduxServiceBuilder(target);
   if(!serviceBuilder.built) {
     if (serviceBuilder.stateProp == undefined) {
       serviceBuilder.stateProp = name;
