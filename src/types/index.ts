@@ -46,9 +46,10 @@ export interface PromiseMiddlewareHandlerEvent<TPayload> {
 };
 
 export interface ReducerRegistration<TState> {
-  namespace: string,
-  initalState: TState,
-  reducerEvents: Array<ReducerEvent<TState, any>>
+  namespace: string;
+  initalState: TState;
+  reducerEvents: Array<ReducerEvent<TState, any>>;
+  serviceStateUpdater?: (state: TState) => void;
 }
 
 export interface LocationMiddlewareConfig<TPayload> {

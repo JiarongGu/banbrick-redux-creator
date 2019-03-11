@@ -1,10 +1,29 @@
 import { assert } from 'chai';
 import * as React from 'react';
+import { Provider } from 'react-redux';
+import { Store } from 'redux';
 import { renderToString } from 'react-dom/server';
 import { connectService } from '../src/redux-service';
-import { Provider } from 'react-redux';
-import { initalizeStore, TestService, Test2Service } from './redux-service/TestService';
-import { Store } from 'redux';
+import { TestService, Test2Service } from './redux-service/TestService';
+import { configureStore } from '../src/configureStore';
+import { getReduxServiceBuilder } from '../src/redux-service/ReduxServiceBuilder';
+import { StoreConfiguration } from '../src/types';
+import { registerStore } from '../src/redux-registry';
+
+export function initalizeStore (config?: StoreConfiguration<any, any>) {
+  const store = configureStore(config);
+
+  // reset services
+  getReduxServiceBuilder(TestService.prototype).built = false;
+  getReduxServiceBuilder(Test2Service.prototype).built = false;
+  return store;
+}
+
+export function resetStore() {
+  registerStore(undefined as any);
+  getReduxServiceBuilder(TestService.prototype).built = false;
+  getReduxServiceBuilder(Test2Service.prototype).built = false;
+}
 
 describe('redux service', () => {
   it('can share state between instance', () => {
@@ -20,6 +39,21 @@ describe('redux service', () => {
     const testService2 = new Test2Service();
     testService2.setProp((prop) => { assert.equal(1, prop) });
     testService1.setProp((prop) => { assert.equal(2, prop) });
+  });
+
+  it('can inherit state from store', () => {
+    const state = { name: 'initalized name' };
+    const store = initalizeStore({ initalState: { TestService: state } });
+    const testService = new TestService();
+    assert.equal(state, testService.state);
+  });
+
+  it('can service created before store initalized', () => {
+    resetStore();
+    const state = { name: 'initalized name' };
+    const testService = new TestService();
+    const store = configureStore({ initalState: { TestService: state } });
+    assert.equal(state, testService.state);
   });
   
   it('can call multiple reducers from effect', () => {
@@ -59,13 +93,6 @@ describe('redux service', () => {
     test2Service.setName('test name');
     const app = createApp(store, connectService(TestService), TestComponent);
     assert.equal('<div>test name</div>', renderToString(app));
-  });
-
-  it('can inherit state from store', () => {
-    const state = { name: 'initalized name' };
-    const store = initalizeStore({ initalState: { TestService: state } });
-    const testService = new TestService();
-    assert.equal(state, testService.state);
   });
 })
 

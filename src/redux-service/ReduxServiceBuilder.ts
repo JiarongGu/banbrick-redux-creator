@@ -32,28 +32,34 @@ export class ReduxServiceBuilder {
     this.built = false;
   }
 
-  build(namespace: string, prototype: any) {
-    const currentStore = getCurrentStore();
-    
+  build(namespace: string, prototype: any) {    
     // set dispatch function
-    this.dispatch = currentStore.dispatch;
+    this.dispatch = (...args) => getCurrentStore().dispatch(...args);
 
     // set default prototype values;
     Object.keys(this.properties).forEach((key) => {
       prototype[key] = this.properties[key];
     });
 
+    const stateProps = this.stateProp;
+
     // if there is no reducers, do not add to store
-    if (this.stateProp && this.reducers.length > 0) {
-      const currentState = currentStore.getState()[namespace];
-      const serviceState = currentState || this.properties[this.stateProp];
+    if (stateProps && this.reducers.length > 0) {
+      const currentStore = getCurrentStore();
+      const currentState = currentStore && currentStore.getState();
+      const serviceState = currentState && currentState[namespace] || this.properties[stateProps];
       const initalState = serviceState === undefined ? null : serviceState;
       
       // match the prototype state to initalState
-      prototype[this.stateProp] = initalState;
+      prototype[stateProps] = initalState;
+
+      // create updater that can update service state
+      const serviceStateUpdater = (state: any) => {
+        prototype[stateProps]= state 
+      };
 
       registerReducer({ 
-        namespace, initalState, reducerEvents: this.reducers 
+        namespace, initalState, reducerEvents: this.reducers, serviceStateUpdater
       });
     }
 

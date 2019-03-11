@@ -18,5 +18,5 @@ function combineReducerEvents<TState>(initalState: TState, ...events: Array<Redu
 
 export function registerReducer<TState>(registration: ReducerRegistration<TState>) {
   var combinedReducer = combineReducerEvents(registration.initalState, ...registration.reducerEvents);
-  addReducer(registration.namespace, combinedReducer);
+  addReducer(registration.namespace, combinedReducer, registration.serviceStateUpdater);
 }

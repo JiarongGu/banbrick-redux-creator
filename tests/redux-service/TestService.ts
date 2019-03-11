@@ -48,12 +48,3 @@ export class Test2Service {
     callback(++this.value);
   }
 }
-
-export function initalizeStore (config?: StoreConfiguration<any, any>) {
-  const store = configureStore(config);
-
-  // reset services
-  getReduxServiceBuilder(TestService.prototype).built = false;
-  getReduxServiceBuilder(Test2Service.prototype).built = false;
-  return store;
-}
