@@ -31,6 +31,8 @@ class TestService {
   async setAll(name: string, value: string) {
     this.setName(name);
     this.setValue(value);
+
+    return 'effect success';
   }
 }
 

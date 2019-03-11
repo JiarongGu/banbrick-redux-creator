@@ -8,7 +8,10 @@ export const effectsMiddleware: any = (store: MiddlewareAPI<any>) => (next: Disp
   const handler = effectsHandlerMap.get(action.type);
 
   if (handler) {
+    // if we found effect instead call next middleware
+    // process the handler and return the result
     const task = handler(store, action.payload);
+
     if(task && task.then && task.finally) {
       effectTasks.push(task);
       task.finally(() => {
@@ -16,6 +19,7 @@ export const effectsMiddleware: any = (store: MiddlewareAPI<any>) => (next: Disp
         effectTasks.splice(index, 1);
       });
     }
+    return task;
   }
   return next(action);
 };

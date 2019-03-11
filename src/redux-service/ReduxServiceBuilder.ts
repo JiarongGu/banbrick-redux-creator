@@ -3,6 +3,7 @@ import { Dispatch, AnyAction } from 'redux';
 import { ReducerEvent, PromiseMiddlewareHandlerEvent, ActionFunctionAny } from '../types';
 import { registerReducer, getCurrentStore } from '../redux-registry';
 import { registerEffectEvents } from '../redux-effects-middleware';
+import { ReactReduxContext } from 'react-redux';
 
 export class ReduxServiceBuilder {
   stateProp?: string;
