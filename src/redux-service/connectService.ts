@@ -2,11 +2,13 @@ import { connect } from "react-redux";
 import { Dispatch } from "react";
 import { AnyAction } from "redux";
 import { getReduxServiceBuilder, ReduxServiceBuilder } from "./ReduxServiceBuilder";
+import { Constructor } from "../types";
 
-export function connectService(...services: Array<{ new(): {} }>) {
+export function connectService(...services: Array<Constructor<any> | object>) {
   const reduxServices = services.map(service => {
-    const reduxService = getReduxServiceBuilder(service.prototype);
-    if (!reduxService.built)
+    const prototype = typeof service === 'object' ? Object.getPrototypeOf(service) : service.prototype;
+    const reduxService = getReduxServiceBuilder(prototype);
+    if (!reduxService.built && typeof service !== 'object')
       new service();
     return reduxService
   });

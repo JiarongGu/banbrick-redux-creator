@@ -46,7 +46,7 @@ describe('redux service', () => {
     const TestComponent = (props: { TestService: TestService }) => {
       return <div>{props.TestService.state!.name}</div> 
     }
-    const app = createApp(store, connectService(TestService), TestComponent);
+    const app = createApp(store, connectService(testService as any), TestComponent);
     assert.equal('<div>test name</div>', renderToString(app));
   });
 

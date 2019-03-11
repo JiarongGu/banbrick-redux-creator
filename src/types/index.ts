@@ -65,3 +65,5 @@ export interface StoreConfiguration<TState, TPayload> {
   locationMiddleware?: LocationMiddlewareConfig<TPayload>;
   devTool?: boolean;
 }
+
+export type Constructor<T> = { new(): T };
