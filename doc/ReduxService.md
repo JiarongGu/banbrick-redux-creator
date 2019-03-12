@@ -1,6 +1,6 @@
 # ReduxService
 using decorators to create redux service class, can access redux state using class from everywhere you want.
-- decorators: `@service`, `@state`, `@reducer`, `@effect`, `@connect`.  
+- decorators: `@service`, `@state`, `@reducer`, `@effect`, `@location`, `@connect`.  
 
 hint: all instance created by service class will shared in the same scope of its prototype.
 
@@ -44,6 +44,19 @@ updateAll(value: number) {
 }
 ```
 `@effect` is used to trigger multiple reducer functions
+
+## @location
+location function will triggered by `Path` or `PathProps` from react-router, location events can be defined by location middleware settings.
+only 2 paramters will be accepted by this function which is matches and location.
+if reload option is true, the location process will be triggered when the time the function gets added to events
+
+```javascript
+@location('/weather-forecast/:index?', true)
+async loadOnWeatherUrl(matches: match<{ index?: string}>, location: Location) {
+  const index = parseInt(matches.params.index || '') || 0;
+  await this.loadWeatherForecast(index);
+}
+```
 
 ## @connect / connectService
 ```javascript
