@@ -5,43 +5,53 @@ import { getReduxServiceBuilder, ReduxServiceBuilder } from './ReduxServiceBuild
 import { Constructor } from '../types';
 
 export function connectService(...services: Array<Constructor | object>) {
-  const reduxServices = services.map(service => {
-    const prototype = typeof service === 'object' ? Object.getPrototypeOf(service) : service.prototype;
-    const reduxService = getReduxServiceBuilder(prototype);
-    if (!reduxService.built && typeof service !== 'object')
-      new service();
-    return reduxService
+  const prototypes = services.map(service => {
+    const constructor = typeof service === 'object' ? Object.getPrototypeOf(service) : service.prototype;
+    const prototype = Object.getPrototypeOf(constructor);
+    return prototype;
   });
 
-  const namespaces = reduxServices.map(service => service.namespace);
+  const serviceBuilders = prototypes.map(prototype => {
+    const serviceBuilder = getReduxServiceBuilder(prototype);
+    if (!serviceBuilder.built)
+      new prototype();
+    return serviceBuilder
+  });
+
+  const namespaces = serviceBuilders.map(service => service.namespace);
   return connect(
     createMapStateToProps(namespaces),
-    createMapDispatchToProps(reduxServices),
-    createMergeProps(reduxServices)
+    createMapDispatchToProps(prototypes),
+    createMergeProps(serviceBuilders)
   )
 }
 
 function createMapStateToProps(namespaces: Array<string>) {
   return function (state: any) {
-    return namespaces.reduce((accumulate, namespace) => {
+    return namespaces.reduce((accumulate: any, namespace) => {
       accumulate[namespace] = state && state[namespace];
       return accumulate;
     }, {});
   };
 }
 
-function createMapDispatchToProps(serviceBuilders: Array<ReduxServiceBuilder>) {
+function createMapDispatchToProps(prototypes: Array<any>) {
+  const ignoredProperties = ['constructor', '_serviceBuilder'];
   return function (dispatch: Dispatch<AnyAction>) {
-    return serviceBuilders.reduce((accumulate, service) => {
-      accumulate[service.namespace] = service.actions;
+    return prototypes.reduce((accumulate: any, prototype) => {
+      const serviceBuilder = getReduxServiceBuilder(prototype);
+      accumulate[serviceBuilder.namespace] = 
+        Object.getOwnPropertyNames(prototype)
+          .filter(x => !ignoredProperties.includes(x))
+          .reduce((a: any, c) => ( a[c] = prototype[c], a ), {});
       return accumulate;
     }, {});
   };
 }
 
-function createMergeProps(reduxServices: Array<ReduxServiceBuilder>) {
-  return function (stateProps, dispatchProps, ownProps) {
-    return reduxServices.reduce((accumulate, service) => {
+function createMergeProps(serviceBuilders: Array<ReduxServiceBuilder>) {
+  return function (stateProps: any, dispatchProps: any, ownProps: any) {
+    return serviceBuilders.reduce((accumulate, service) => {
       const state = service.stateProp ? { [service.stateProp]: stateProps[service.namespace] } : undefined;
       accumulate[service.namespace] = {
         ...dispatchProps[service.namespace],

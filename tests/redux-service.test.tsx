@@ -93,6 +93,17 @@ describe('redux service', () => {
     const app = createApp(store, connectService(TestService), TestComponent);
     assert.equal('<div>test name</div>', renderToString(app));
   });
+
+  it('can use other function from service', () => {
+    const store = initalizeStore();
+    const test2Service = new Test2Service();
+    const TestComponent = (props: { Test2Service: Test2Service }) => {
+      return <div>{props.Test2Service.state.name}</div>
+    }
+    test2Service.setName('test name');
+    const app = createApp(store, connectService(test2Service), TestComponent);
+    assert.equal('<div>test name</div>', renderToString(app));
+  });
 })
 
 function createApp(store: Store, connecter: Function, component: any) {

@@ -7,12 +7,12 @@ export function service(namespace: string) {
     const serviceBuilder = getReduxServiceBuilder(prototype);
   
     return class extends constructor {
-      constructor(...args) {
+      constructor(...args : Array<any>) {
         super(...args);
   
         // do not build second time
         if(!serviceBuilder.built) {
-          const properties = Object.keys(this).reduce((properties, key) => {
+          const properties = Object.keys(this).reduce((properties: any, key) => {
             properties[key] = this[key];
             return properties;
           }, {});

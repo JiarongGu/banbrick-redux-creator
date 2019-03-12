@@ -44,4 +44,8 @@ export class Test2Service {
   setProp(callback: (prop: number) => void) {
     callback(++this.value);
   }
+
+  get state() {
+    return this.testService.state;
+  }
 }
