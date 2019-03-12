@@ -1,7 +1,4 @@
 import { service, state, reducer, effect } from "../../src/redux-service";
-import { configureStore } from "../../src/configureStore";
-import { getReduxServiceBuilder } from "../../src/redux-service/ReduxServiceBuilder";
-import { StoreConfiguration } from "../../src/types";
 
 export class TestState {
   name: string = '';

@@ -1,2 +1,3 @@
 export * from './registerReducers';
-export { registerStore, getCurrentStore, buildRootReducer } from './reducerRegistry';
+export { addDynamicReducer, applyReduxCreatorStore, getCurrentStore, getDynamicReducers } from './reducerRegistry';
+export { buildReducers } from './buildReducers';

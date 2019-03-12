@@ -1,33 +1,27 @@
-import { Store, createStore, applyMiddleware, compose } from 'redux';
+import { createStore, applyMiddleware, compose, Middleware, Store } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { createLocationMiddleware } from '../redux-location-middleware';
-import { effectsMiddleware } from '../redux-effects-middleware';
-import { buildRootReducer, registerStore } from '../redux-registry';
-import { StoreConfiguration } from '../types';
+import { applyReduxCreatorStore, buildReducers } from '../redux-registry';
+import { ReduxCreatorStoreConfiguration } from '../types';
+import { configureReduxCreator } from './configureReduxCreator';
 
-export function configureStore<TState>(config?: StoreConfiguration<TState, any>): Store<TState> {
-  const initalState = config && config.initalState;
-  const configReducers = config && config.reducers || [];
-  const configMiddlewares = config && config.middlewares || [];
-  const devTool = !!(config && config.devTool);
-  const locationConfig = config && config.locationMiddleware;
+type configureStoreDefault<TState = any> = (reducers: { [key: string]: any }, middlewares: Array<Middleware>, preloadedState?: TState, devTool?: boolean) => Store;
 
-  const locationMiddleware = locationConfig && createLocationMiddleware(
-    locationConfig.actionType, 
-    locationConfig.initalLocation, 
-    locationConfig.locationFormatter
-  );
-  
-  const applyMiddlewares = configMiddlewares.concat([effectsMiddleware]);
-  if (locationMiddleware) 
-    applyMiddlewares.push(locationMiddleware);
-
-  const middlewares = applyMiddleware(...applyMiddlewares);
-  const composedMiddlewares = devTool ? composeWithDevTools(middlewares): compose(middlewares);
-
-  const combinedReducer = buildRootReducer<TState>(initalState, { ...configReducers });
-  
-  const store = createStore(combinedReducer as any, initalState, composedMiddlewares) as Store<TState>;
-  registerStore(store);
+export function configureStore<TState = any>(config?: ReduxCreatorStoreConfiguration<TState>, configureStoreAction?: configureStoreDefault) {
+  const { middlewares, reducers } = configureReduxCreator(config);
+  const devTool = config && config.devTool || false;
+  let preloadedState = config && config.preloadedState;
+  const configureAction = configureStoreAction || configureStoreDefault;
+  const store = configureAction(reducers, middlewares, preloadedState, devTool);
+  applyReduxCreatorStore(store);
   return store;
 }
+
+function configureStoreDefault(reducers, middlewares, preloadedState, devTool = false) {
+  const combinedMiddleware = applyMiddleware(...middlewares);
+  const composedMiddlewares = devTool ? composeWithDevTools(combinedMiddleware) : compose(combinedMiddleware);
+  const combinedReducer = buildReducers(reducers);
+  if (preloadedState == undefined)
+    return createStore(combinedReducer as any, composedMiddlewares);
+  return createStore(combinedReducer as any, preloadedState, composedMiddlewares);
+}
+

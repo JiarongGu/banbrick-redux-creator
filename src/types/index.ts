@@ -52,17 +52,27 @@ export interface ReducerRegistration<TState> {
   serviceStateUpdater?: (state: TState) => void;
 }
 
+export interface DynamicReducerMap {
+  namespace: string;
+  reducer: Reducer<any, any>;
+  serviceStateUpdater?: (state) => void;
+}
+
 export interface LocationMiddlewareConfig<TPayload> {
   actionType: string;
   initalLocation: Location;
   locationFormatter?: (payload: TPayload) => Location;
 }
 
-export interface StoreConfiguration<TState, TPayload> {
+export interface ReduxCreatorConfiguration {
   reducers?: { [key: string]: any };
-  initalState?: TState;
   middlewares?: Middleware[];
-  locationMiddleware?: LocationMiddlewareConfig<TPayload>;
+  locationMiddleware?: LocationMiddlewareConfig<any>;
+}
+
+export interface ReduxCreatorStoreConfiguration<TState = any> extends ReduxCreatorConfiguration{
+  preloadedState?: TState;
   devTool?: boolean;
 }
+
 export type Constructor<T = any, A = any> = { new(...args: Array<A>): T };

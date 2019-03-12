@@ -7,12 +7,11 @@ import { connectService } from '../src/redux-service';
 import { TestService, Test2Service } from './redux-service/TestService';
 import { configureStore } from '../src/configureStore';
 import { getReduxServiceBuilder } from '../src/redux-service/ReduxServiceBuilder';
-import { StoreConfiguration } from '../src/types';
-import { registerStore } from '../src/redux-registry';
+import { ReduxCreatorStoreConfiguration } from '../src/types';
+import { applyReduxCreatorStore } from '../src/redux-registry';
 
-export function initalizeStore (config?: StoreConfiguration<any, any>) {
+export function initalizeStore(config?: ReduxCreatorStoreConfiguration) {
   const store = configureStore(config);
-
   // reset services
   getReduxServiceBuilder(TestService.prototype).built = false;
   getReduxServiceBuilder(Test2Service.prototype).built = false;
@@ -20,12 +19,19 @@ export function initalizeStore (config?: StoreConfiguration<any, any>) {
 }
 
 export function resetStore() {
-  registerStore(undefined as any);
+  applyReduxCreatorStore(undefined as any);
   getReduxServiceBuilder(TestService.prototype).built = false;
   getReduxServiceBuilder(Test2Service.prototype).built = false;
 }
 
 describe('redux service', () => {
+  it('can inherit state from store', () => {
+    const state = { name: 'initalized name' };
+    const store = initalizeStore({ preloadedState: { TestService: state } });
+    const testService = new TestService();
+    assert.equal(state, testService.state);
+  });
+
   it('can share state between instance', () => {
     const store = initalizeStore();
     const testService1 = new TestService();
@@ -41,21 +47,14 @@ describe('redux service', () => {
     testService1.setProp((prop) => { assert.equal(2, prop) });
   });
 
-  it('can inherit state from store', () => {
-    const state = { name: 'initalized name' };
-    const store = initalizeStore({ initalState: { TestService: state } });
-    const testService = new TestService();
-    assert.equal(state, testService.state);
-  });
-
   it('can service created before store initalized', () => {
     resetStore();
     const state = { name: 'initalized name' };
     const testService = new TestService();
-    const store = configureStore({ initalState: { TestService: state } });
+    const store = configureStore({ preloadedState: { TestService: state } });
     assert.equal(state, testService.state);
   });
-  
+
   it('can call multiple reducers from effect', () => {
     const store = initalizeStore();
     const testService = new TestService();
@@ -78,7 +77,7 @@ describe('redux service', () => {
     const testService = new TestService();
     testService.setAll('test name', 'test value');
     const TestComponent = (props: { TestService: TestService }) => {
-      return <div>{props.TestService.state!.name}</div> 
+      return <div>{props.TestService.state!.name}</div>
     }
     const app = createApp(store, connectService(testService as any), TestComponent);
     assert.equal('<div>test name</div>', renderToString(app));
@@ -88,7 +87,7 @@ describe('redux service', () => {
     const store = initalizeStore();
     const test2Service = new Test2Service();
     const TestComponent = (props: { TestService: TestService }) => {
-      return <div>{props.TestService.state!.name}</div> 
+      return <div>{props.TestService.state!.name}</div>
     }
     test2Service.setName('test name');
     const app = createApp(store, connectService(TestService), TestComponent);
@@ -98,5 +97,5 @@ describe('redux service', () => {
 
 function createApp(store: Store, connecter: Function, component: any) {
   const ConnectedComponent = connecter(component);
-  return <Provider store={store}><ConnectedComponent/></Provider>;
+  return <Provider store={store}><ConnectedComponent /></Provider>;
 }

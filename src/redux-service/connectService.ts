@@ -24,7 +24,7 @@ export function connectService(...services: Array<Constructor | object>) {
 function createMapStateToProps(namespaces: Array<string>) {
   return function (state: any) {
     return namespaces.reduce((accumulate, namespace) => {
-      accumulate[namespace] = state[namespace];
+      accumulate[namespace] = state && state[namespace];
       return accumulate;
     }, {});
   };
