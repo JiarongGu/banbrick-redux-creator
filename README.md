@@ -11,13 +11,14 @@ redux creator for less boilerplate, also allow redux to be loaded by code split.
 ### Configure store
 create a store can use ReduxCreator with configureStore
 ```javascript
-import { configureStore } from '@banbrick/redux-creator';
+import { configureCreatorStore } from '@banbrick/redux-creator';
 
 // its also possible to add reducers and middlewares through this api
-const store = configureStore({ 
+const store = configureCreatorStore({ 
   reducers, // static reducers, built without creator
-  initalState, // inital state
+  preloadedState, // inital state
   middlewares, // addtional middlewares
+  history, // for auto add location middleware
   devTool: true // enable redux-dev-tool
 });
 ```

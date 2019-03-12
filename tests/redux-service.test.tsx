@@ -5,13 +5,13 @@ import { Store } from 'redux';
 import { renderToString } from 'react-dom/server';
 import { connectService } from '../src/redux-service';
 import { TestService, Test2Service } from './redux-service/TestService';
-import { configureStore } from '../src/configureStore';
+import { configureCreatorStore } from '../src/configureStore';
 import { getReduxServiceBuilder } from '../src/redux-service/ReduxServiceBuilder';
 import { ReduxCreatorStoreConfiguration } from '../src/types';
 import { applyReduxCreatorStore } from '../src/redux-registry';
 
 export function initalizeStore(config?: ReduxCreatorStoreConfiguration) {
-  const store = configureStore(config);
+  const store = configureCreatorStore(config);
   // reset services
   getReduxServiceBuilder(TestService.prototype).built = false;
   getReduxServiceBuilder(Test2Service.prototype).built = false;
@@ -51,7 +51,7 @@ describe('redux service', () => {
     resetStore();
     const state = { name: 'initalized name' };
     const testService = new TestService();
-    const store = configureStore({ preloadedState: { TestService: state } });
+    const store = configureCreatorStore({ preloadedState: { TestService: state } });
     assert.equal(state, testService.state);
   });
 

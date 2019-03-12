@@ -1,5 +1,5 @@
 import { MiddlewareAPI, Middleware } from 'redux';
-import { Location } from 'history';
+import { Location, History } from 'history';
 
 export interface Action<Payload> {
   type: string;
@@ -55,24 +55,25 @@ export interface ReducerRegistration<TState> {
 export interface DynamicReducerMap {
   namespace: string;
   reducer: Reducer<any, any>;
-  serviceStateUpdater?: (state) => void;
+  serviceStateUpdater?: (state: any) => void;
 }
 
 export interface LocationMiddlewareConfig<TPayload> {
-  actionType: string;
-  initalLocation: Location;
+  action: string;
+  location: Location;
   locationFormatter?: (payload: TPayload) => Location;
 }
 
-export interface ReduxCreatorConfiguration {
+export interface StoreConfiguration<TState = any> {
   reducers?: { [key: string]: any };
   middlewares?: Middleware[];
-  locationMiddleware?: LocationMiddlewareConfig<any>;
-}
-
-export interface ReduxCreatorStoreConfiguration<TState = any> extends ReduxCreatorConfiguration{
   preloadedState?: TState;
   devTool?: boolean;
+}
+
+export interface ReduxCreatorStoreConfiguration<TState = any> extends StoreConfiguration<TState> {
+  locationMiddleware?: Middleware
+  history?: History
 }
 
 export type Constructor<T = any, A = any> = { new(...args: Array<A>): T };

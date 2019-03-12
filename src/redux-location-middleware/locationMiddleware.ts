@@ -9,11 +9,11 @@ let locationState: Location;
 
 // create location middleware which will process location events
 export function createLocationMiddleware<TPayload>(
+  initalLocation: Location,
   locationActionType: string,
-  initallocation: Location,
   locationFormatter?: (payload: TPayload) => Location
 ) {
-  locationState = initallocation;
+  locationState = initalLocation;
 
   return (store: MiddlewareAPI<any>) => (next: Dispatch<AnyAction>) => (action: AnyAction) => {
     if (action.type == locationActionType) {
