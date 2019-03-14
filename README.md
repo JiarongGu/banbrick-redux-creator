@@ -26,6 +26,8 @@ const store = configureCreatorStore({
 ### Configure Reducers
 - [ReduxCreator](https://github.com/JiarongGu/banbrick-redux-creator/blob/master/doc/ReduxCreator.md) using functions
 - [ReduxService](https://github.com/JiarongGu/banbrick-redux-creator/blob/master/doc/ReduxService.md) using decorators
+
+- ReduxService moved to [Redux-Sink](https://github.com/JiarongGu/redux-sink)
     
 ### Others
 - [Advanced](https://github.com/JiarongGu/banbrick-redux-creator/blob/master/doc/Advanced.md)
